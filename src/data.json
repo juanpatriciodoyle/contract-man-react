@@ -1,0 +1,23 @@
+{
+  "BASE_URL": "http://vmxfoundry.hcl-showcase.com:8080/",
+  "getTokensParams": {
+    "headers": {
+      "X-Voltmx-App-Key": "833060fb0247bafc2aac5dcc120a7ad7",
+      "X-Voltmx-App-Secret": "74071c1960a6142c84102f90bef88d2e",
+      "url": "authService/100000002/login?provider=CDRLJWT"
+    },
+    "domino_user": {
+      "userid": "Juan.Patricio.Doyle@hcl-showcase.com",
+      "password": "You-Wish"
+    }
+  },
+  "getContractsParams": {
+    "headers": {
+      "url": "services/CDRL_WSA/getDocumentsView"
+    },
+    "body": {
+      "SCOPE": "cdrlscope",
+      "VIEW": "CDRLs"
+    }
+  }
+}
