@@ -156,7 +156,7 @@ const VendorPortalPage: React.FC = () => {
         {
             key: 'actions',
             label: 'Actions',
-            renderCell: (item) => (
+            renderCell: () => (
                 <ActionIcons>
                     <ActionButton><Users size={16}/></ActionButton>
                 </ActionIcons>

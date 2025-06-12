@@ -84,7 +84,7 @@ function Table<T>({ columns, data, emptyMessage = "No items to display.", showTo
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    {columns.map((column, colIndex) => (
+                                    {columns.map((column) => (
                                         <Td key={`${column.key}-${index}`}>
                                             {column.renderCell(item, index)}
                                         </Td>
