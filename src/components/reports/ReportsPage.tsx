@@ -110,36 +110,6 @@ const RiskAnalysisGrid = styled(AnalyticsGrid)`
     }
 `;
 
-const RiskCategoryCard = styled(CardWrapper)`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-`;
-
-const RiskLevelRow = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    color: #4b5563;
-`;
-
-const RiskLevelBarContainer = styled.div`
-    flex-grow: 1;
-    height: 8px;
-    background-color: #e5e7eb;
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 0 0.5rem;
-`;
-
-const RiskLevelBarFill = styled.div<{ $width: string; $color: string }>`
-    width: ${({$width}) => $width};
-    height: 100%;
-    background-color: ${({$color}) => $color};
-    border-radius: 4px;
-`;
-
 const ExportOptionsContainer = styled(CardWrapper)`
     margin-top: 2.5rem;
     display: flex;
