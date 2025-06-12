@@ -1,3 +1,5 @@
+// src/components/dashboard/Dashboard.tsx
+
 import React from 'react';
 import {motion} from 'framer-motion';
 import styled from 'styled-components';
@@ -16,12 +18,11 @@ interface DashboardProps {
     metrics: KpiMetrics;
 }
 
-// This styled-component creates our responsive grid
 const DashboardGrid = styled(motion.div)`
     width: 100%;
     max-width: 80rem;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 0;
 
     display: grid;
     gap: 1.5rem;
