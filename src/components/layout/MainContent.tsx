@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useGetTokens } from '../../hooks/useGetTokens';
 import { useGetContracts } from '../../hooks/useGetContracts';
 import Dashboard from '../dashboard/Dashboard';
-import ContractList from '../contracts/ContractList';
+import ContractManager from '../contracts/ContractManager';
 
 const ContentWrapper = styled.main`
   flex-grow: 1; /* Allows this component to take up the remaining space */
@@ -24,12 +24,6 @@ const PageSubtitle = styled.p`
   color: #6b7280;
   margin-top: -0.5rem;
   margin-bottom: 2.5rem;
-`;
-
-const SectionHeader = styled.h2`
-  font-size: 1.5rem;
-  color: #111827;
-  margin-top: 0;
 `;
 
 const Hr = styled.hr`
@@ -53,11 +47,11 @@ const MainContent = () => {
 
             <Hr />
 
-            <SectionHeader>Contracts Data</SectionHeader>
             {isLoading && <p>Loading contracts...</p>}
             {error && <p style={{ color: 'red' }}>Error fetching contracts: {error}</p>}
+
             {contracts && contracts.responseList.length > 0 && (
-                <ContractList items={contracts.responseList} />
+                <ContractManager items={contracts.responseList} />
             )}
         </ContentWrapper>
     );

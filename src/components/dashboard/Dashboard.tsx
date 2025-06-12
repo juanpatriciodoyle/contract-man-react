@@ -6,7 +6,7 @@ import KPICard from './KPICard';
 import { DollarSign, Check, Calendar, Clock } from 'lucide-react';
 
 // New data array matching your image
-const kpiData = [
+const KPI_DATA = [
     {
         title: "AVG. PROCESSING TIME",
         value: "4.2 days",
@@ -90,7 +90,7 @@ const Dashboard = () => {
             initial="hidden"
             animate="visible"
         >
-            {kpiData.map((card) => (
+            {KPI_DATA.map((card) => (
                 <motion.div key={card.title} variants={itemVariants}>
                     <KPICard
                         title={card.title}
