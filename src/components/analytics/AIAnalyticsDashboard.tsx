@@ -42,7 +42,7 @@ const CardWrapper = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-    font-size: 1.125rem; 
+    font-size: 1.125rem;
     font-weight: 600;
     color: #111827;
     margin: 0 0 1.5rem 0;
@@ -284,7 +284,7 @@ const AIAnalyticsDashboard: React.FC = () => {
             </AnalyticsGrid>
 
             <SectionTitle>
-                <Zap size={20}/> {/* Added Zap icon */}
+                <Zap size={20}/>
                 AI Performance Trends
             </SectionTitle>
             <AnalyticsGrid variants={containerVariants} initial="hidden" animate="visible">
