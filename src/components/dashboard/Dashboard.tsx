@@ -1,12 +1,9 @@
-// src/components/dashboard/Dashboard.tsx
-
 import React from 'react';
 import {motion} from 'framer-motion';
 import styled from 'styled-components';
 import KPICard from './KPICard';
 import {Calendar, Check, Clock, DollarSign} from 'lucide-react';
 
-// Interface for the props our Dashboard will receive
 interface KpiMetrics {
     totalValue: string;
     activeContracts: number;
@@ -56,7 +53,6 @@ const itemVariants = {
 };
 
 const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
-    // The KPI_DATA array is now built dynamically from the props
     const KPI_DATA = [
         {
             title: "AVG. PROCESSING TIME",

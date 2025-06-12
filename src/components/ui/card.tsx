@@ -6,12 +6,10 @@ export const Card = styled.div`
     border-radius: 0.75rem;
     border: 1px solid #e5e7eb;
 
-    /* Add transitions for the properties we will change on hover */
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
-    /* Define the hover state */
     &:hover {
-        transform: translateY(-4px); /* This lifts the card up */
+        transform: translateY(-4px);
         box-shadow: rgba(0, 0, 0, 0.1) 0 20px 40px;
 
     }

@@ -5,28 +5,13 @@ import Dashboard from '../dashboard/Dashboard';
 import ContractStatusOverview from '../dashboard/ContractStatusOverview';
 import ContractsByIndustry from '../dashboard/ContractsByIndustry';
 import {formatValue} from '../utils';
+import {Subtitle, Title} from "../ui/text";
 
 const ContentWrapper = styled.main`
     flex-grow: 1;
     padding: 2rem 3rem;
     height: 100vh;
     overflow-y: auto;
-`;
-
-const PageTitle = styled.h1`
-    font-size: 2rem;
-    font-weight: 700;
-    color: #111827;
-    margin-top: 0;
-    text-align: left;
-`;
-
-const PageSubtitle = styled.p`
-    font-size: 1rem;
-    color: #6b7280;
-    margin-top: -0.5rem;
-    margin-bottom: 2.5rem;
-    text-align: left;
 `;
 
 const ChartGrid = styled.div`
@@ -84,8 +69,8 @@ const MainContent: React.FC<MainContentProps> = ({contracts}) => {
 
     return (
         <ContentWrapper>
-            <PageTitle>Dashboard Overview</PageTitle>
-            <PageSubtitle>Comprehensive contract management and AI insights</PageSubtitle>
+            <Title>Dashboard Overview</Title>
+            <Subtitle>Comprehensive contract management and AI insights</Subtitle>
 
             <Dashboard metrics={kpiMetrics}/>
 

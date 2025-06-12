@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, Bot } from 'lucide-react';
+import {LayoutDashboard, FileText, Bot, Users} from 'lucide-react';
 
 const SidebarWrapper = styled.div`
     width: 280px;
@@ -133,6 +133,12 @@ const Sidebar: React.FC<SidebarProps> = ({ contractCount }) => {
                         Contracts
                     </LinkContent>
                     {contractCount > 0 && <NotificationBadge>{contractCount}</NotificationBadge>}
+                </StyledNavLink>
+                <StyledNavLink to="/admin-vendors">
+                    <LinkContent>
+                        <Users size={20} />
+                        Vendors
+                    </LinkContent>
                 </StyledNavLink>
             </NavList>
         </SidebarWrapper>

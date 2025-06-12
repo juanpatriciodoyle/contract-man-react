@@ -200,8 +200,6 @@ const ScoreText = styled.span`
     color: #4f46e5;
 `;
 
-// --- CHILD COMPONENTS ---
-
 const STATUS_OPTIONS = ["All Status", "Pending", "Approved", "Rejected", "Needs Review", "Accepted"];
 
 const Toolbar: React.FC<{
@@ -358,7 +356,6 @@ const ContractsTable: React.FC<ContractsTableProps> = ({items, mockData}) => (
     </TableWrapper>
 );
 
-// --- MAIN COMPONENT ---
 interface ContractManagerProps {
     items: ResponseItem[];
     mockData: { value: number | null; aiScore: number }[];

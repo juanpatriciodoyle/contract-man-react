@@ -24,7 +24,6 @@ interface ContractsPageProps {
 }
 
 const ContractsPage: React.FC<ContractsPageProps> = ({ contracts, isLoading, error }) => {
-    // This mock data is needed by the ContractManager for the table values
     const MOCK_CONTRACT_DATA = [
         { value: 2400000, aiScore: 78.31 },
         { value: 3200000, aiScore: 68.32 },

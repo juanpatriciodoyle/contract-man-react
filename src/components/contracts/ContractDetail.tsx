@@ -56,7 +56,6 @@ const DetailItem = styled.div`
 `;
 
 const ContractDetail = () => {
-    // useLocation allows us to access the state passed during navigation
     const location = useLocation();
     const contract = location.state?.contract as ResponseItem | undefined;
 
@@ -72,7 +71,7 @@ const ContractDetail = () => {
 
     return (
         <DetailWrapper>
-            <BackLink to="/"><ArrowLeft size={16}/> Back to Dashboard</BackLink>
+            <BackLink to="/contracts"><ArrowLeft size={16}/> Back to Contracts</BackLink>
             <DetailHeader>{contract.TITLE}</DetailHeader>
             <p style={{marginTop: '-1rem', color: '#6b7280'}}>ID: {contract.ID}</p>
 

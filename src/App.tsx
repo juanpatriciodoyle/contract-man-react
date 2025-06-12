@@ -8,6 +8,7 @@ import ContractDetail from './components/contracts/ContractDetail';
 import ContractsPage from './components/contracts/ContractsPage'; // Corrected import path
 import {useGetTokens} from './hooks/useGetTokens';
 import {useGetContracts} from './hooks/useGetContracts';
+import VendorPortalPage from "./components/vendor-admin/VendorPortalPage";
 
 const AppWrapper = styled.div`
     display: flex;
@@ -46,6 +47,10 @@ const App = () => {
                                 error={error}
                             />
                         }
+                    />
+                    <Route
+                        path="/admin-vendors"
+                        element={<VendorPortalPage />}
                     />
                 </Route>
                 <Route path="/contract/:contractId" element={<ContractDetail/>}/>
