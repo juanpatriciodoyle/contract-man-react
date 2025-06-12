@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {Check, Clock, DollarSign, Download, FileText, Users} from 'lucide-react';
+import {Check, Clock, DollarSign, Download, FileText, Users, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {Subtitle, Title} from '../ui/text';
 import StatusProgressBarChart from '../ui/statusProgressBarChart';
@@ -57,7 +57,16 @@ const CardWrapper = styled.div`
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
 `;
 
-const SectionTitle = styled.h3`
+const CardTitle = styled.h3`
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+`;
+
+const SectionTitle = styled.h2`
     font-weight: 600;
     color: #111827;
     margin: 0 0 1.5rem 0;
@@ -444,9 +453,9 @@ const ReportsPage: React.FC = () => {
 
             <ChartGrid>
                 <CardWrapper id="monthly-trends-section">
-                    <SectionTitle>
+                    <CardTitle>
                         Monthly Contract Trends
-                    </SectionTitle>
+                    </CardTitle>
                     <MonthlyTrendList>
                         {MONTHLY_CONTRACT_TRENDS_DATA.map((item) => (
                             <MonthlyTrendItem key={item.month}>
@@ -477,31 +486,34 @@ const ReportsPage: React.FC = () => {
                 </div>
             </ChartGrid>
 
-            <SectionTitle>Risk Analysis by Category</SectionTitle>
+            <SectionTitle>
+                <Zap size={20}/>
+                Risk Analysis by Category
+            </SectionTitle>
             <RiskAnalysisGrid id="risk-analysis-section" variants={containerVariants} initial="hidden"
                               animate="visible">
                 {RISK_ANALYSIS_CATEGORY_DATA.map((categoryData) => (
                     <motion.div key={categoryData.category} variants={itemVariants}>
-                        <RiskCategoryCard>
-                            <h4 style={{margin: 0, color: '#111827', fontWeight: 600}}>
-                                {categoryData.category}
-                            </h4>
-                            {categoryData.levels.map((level) => (
-                                <RiskLevelRow key={level.label}>
-                                    <span>{level.label}</span>
-                                    <RiskLevelBarContainer>
-                                        <RiskLevelBarFill $width={`${level.percentage}%`} $color={level.color}/>
-                                    </RiskLevelBarContainer>
-                                    <span>{level.percentage}%</span>
-                                </RiskLevelRow>
-                            ))}
-                        </RiskCategoryCard>
+                        <StatusProgressBarChart
+                            title={categoryData.category}
+                            data={categoryData.levels.map(level => ({
+                                label: level.label,
+                                count: 0,
+                                percentage: level.percentage,
+                                color: level.color,
+                                value: `${level.percentage}%`
+                            }))}
+                            showItemCountAndPercentage={false}
+                            showItemValue={true}
+                            showLeftIcon={false}
+                            fontScale={0.9}
+                        />
                     </motion.div>
                 ))}
             </RiskAnalysisGrid>
 
             <ExportOptionsContainer id="export-options-section">
-                <SectionTitle>Export Options</SectionTitle>
+                <CardTitle>Export Options</CardTitle>
                 <ExportButtons>
                     <ExportButton onClick={handleExportPdf}>
                         <Download size={16}/>
