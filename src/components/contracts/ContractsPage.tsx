@@ -4,8 +4,9 @@ import ContractManager from './ContractManager';
 import {ApiResponse} from '../../hooks/useGetContracts';
 
 const PageWrapper = styled.div`
-  padding: 2rem 2rem;
-  height: 100%;
+    padding: 2rem 2rem;
+    height: 100%;
+    width: 100%;
 `;
 
 const PageTitle = styled.h1`
