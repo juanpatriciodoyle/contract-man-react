@@ -9,7 +9,6 @@ import {jsPDF} from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
-import JSZip from 'jszip';
 
 const PageWrapper = styled.div`
     flex-grow: 1;
@@ -21,7 +20,6 @@ const PageWrapper = styled.div`
 const AnalyticsGrid = styled(motion.div)`
     width: 100%;
     padding: 0;
-
     display: grid;
     gap: 2.5rem;
 
@@ -472,7 +470,8 @@ const ReportsPage: React.FC = () => {
             </ChartGrid>
 
             <SectionTitle>Risk Analysis by Category</SectionTitle>
-            <RiskAnalysisGrid id="risk-analysis-section" variants={containerVariants} initial="hidden" animate="visible">
+            <RiskAnalysisGrid id="risk-analysis-section" variants={containerVariants} initial="hidden"
+                              animate="visible">
                 {RISK_ANALYSIS_CATEGORY_DATA.map((categoryData) => (
                     <motion.div key={categoryData.category} variants={itemVariants}>
                         <RiskCategoryCard>
