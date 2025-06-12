@@ -4,7 +4,7 @@ import ContractManager from './ContractManager';
 import {ApiResponse} from '../../hooks/useGetContracts';
 
 const PageWrapper = styled.div`
-  padding: 2rem 3rem;
+  padding: 2rem 2rem;
   height: 100%;
 `;
 
@@ -38,7 +38,7 @@ const ContractsPage: React.FC<ContractsPageProps> = ({ contracts, isLoading, err
 
     return (
         <PageWrapper>
-            <PageTitle>All Contracts ({contracts?.responseList?.length || 0})</PageTitle>
+            <PageTitle>All Contracts</PageTitle>
 
             {isLoading && <p>Loading contracts...</p>}
             {error && <p style={{ color: 'red' }}>Error fetching contracts: {error}</p>}

@@ -5,7 +5,7 @@ import { ResponseItem } from '../../hooks/useGetContracts';
 import { ArrowLeft } from 'lucide-react';
 
 const DetailWrapper = styled.div`
-  padding: 2rem 3rem;
+  padding: 2rem 2rem;
   height: 100vh;
   overflow-y: auto;
   color: #111827;

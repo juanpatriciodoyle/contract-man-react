@@ -10,7 +10,7 @@ import {ActionButton, ActionIcons} from '../ui/table/tableElements';
 
 const PageWrapper = styled.div`
     flex-grow: 1;
-    padding: 2rem 3rem;
+    padding: 2rem 2rem;
     height: 100vh;
     overflow-y: auto;
 `;

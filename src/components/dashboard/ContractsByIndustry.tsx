@@ -1,5 +1,3 @@
-// src/components/dashboard/ContractsByIndustry.tsx
-
 import React from 'react';
 import styled from 'styled-components';
 import { Laptop, Heart, TrendingUp, Factory } from 'lucide-react';
