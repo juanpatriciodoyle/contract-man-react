@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+// src/components/contracts/ContractManager.tsx
+
+import React, { useState, useEffect, useRef, JSX } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, Edit, Trash2, Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { ResponseItem } from '../../hooks/useGetContracts';
 import { StatusBadge } from './StatusBadge';
@@ -59,15 +61,50 @@ const SearchInputWrapper = styled.div`
     }
 `;
 
+const FilterWrapper = styled.div`
+    position: relative;
+`;
+
 const FilterButton = styled.button`
     display: flex;
     align-items: center;
     gap: 8px;
-    background: none;
+    background: white;
     border: 1px solid #d1d5db;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
+    font-size: 0.875rem;
+`;
+
+const DropdownMenu = styled(motion.div)`
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    width: 200px;
+    padding: 0.5rem;
+    z-index: 10;
+`;
+
+const DropdownItem = styled.button<{ selected: boolean }>`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background-color: ${({ selected }) => (selected ? '#f3f4f6' : 'transparent')};
+    border-radius: 0.25rem;
+    text-align: left;
+    cursor: pointer;
+    font-weight: ${({ selected }) => (selected ? '500' : '400')};
+
+    &:hover {
+        background-color: #f3f4f6;
+    }
 `;
 
 const TableWrapper = styled.div`
@@ -158,49 +195,94 @@ const AIScoreWrapper = styled.div`
 `;
 
 const ScoreBar = styled.div`
-    width: 80px;
-    height: 8px;
-    background-color: #e0e7ff;
-    border-radius: 4px;
-    overflow: hidden;
+  width: 80px;
+  height: 8px;
+  background-color: #e0e7ff;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
 const ScoreFill = styled.div<{ score: number }>`
-    width: ${(props) => props.score}%;
-    height: 100%;
-    background-color: #4f46e5;
-    border-radius: 4px;
+  width: ${(props) => props.score}%;
+  height: 100%;
+  background-color: #4f46e5;
+  border-radius: 4px;
 `;
 
 const ScoreText = styled.span`
-    font-weight: 500;
-    min-width: 50px;
-    color: #4f46e5;
+  font-weight: 500;
+  min-width: 50px;
+  color: #4f46e5;
 `;
 
+
 // --- CHILD COMPONENTS ---
+
+const STATUS_OPTIONS = ["All Status", "Pending", "Approved", "Rejected", "Needs Review", "Accepted"];
 
 const Toolbar: React.FC<{
     searchQuery: string;
     onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ searchQuery, onSearchChange }) => (
-    <ToolbarWrapper>
-        <SearchInputWrapper>
-            <Search size={18} />
-            <input
-                type="text"
-                placeholder="Search contracts..."
-                value={searchQuery}
-                onChange={onSearchChange}
-            />
-        </SearchInputWrapper>
-        <div>
-            <FilterButton>
-                <SlidersHorizontal size={16} /> All Status <ChevronDown size={16} />
-            </FilterButton>
-        </div>
-    </ToolbarWrapper>
-);
+    selectedStatus: string;
+    onStatusChange: (status: string) => void;
+}> = ({ searchQuery, onSearchChange, selectedStatus, onStatusChange }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <ToolbarWrapper>
+            <SearchInputWrapper>
+                <Search size={18} />
+                <input
+                    type="text"
+                    placeholder="Search contracts..."
+                    value={searchQuery}
+                    onChange={onSearchChange}
+                />
+            </SearchInputWrapper>
+
+            <FilterWrapper ref={dropdownRef}>
+                <FilterButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                    <SlidersHorizontal size={16} /> {selectedStatus} <ChevronDown size={16} />
+                </FilterButton>
+
+                <AnimatePresence>
+                    {isDropdownOpen && (
+                        <DropdownMenu
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            {STATUS_OPTIONS.map(status => (
+                                <DropdownItem
+                                    key={status}
+                                    selected={status === selectedStatus}
+                                    onClick={() => {
+                                        onStatusChange(status);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                >
+                                    {status}
+                                </DropdownItem>
+                            ))}
+                        </DropdownMenu>
+                    )}
+                </AnimatePresence>
+            </FilterWrapper>
+        </ToolbarWrapper>
+    );
+};
 
 const AIScore: React.FC<{ score: number }> = ({ score }) => (
     <AIScoreWrapper>
@@ -280,16 +362,21 @@ interface ContractManagerProps {
 
 const ContractManager: React.FC<ContractManagerProps> = ({ items }) => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('All Status');
 
-    const filteredItems = items.filter(item =>
-        item.TITLE.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredItems = items.filter(item => {
+        const matchesSearch = item.TITLE.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus = selectedStatus === 'All Status' || item['$3'] === selectedStatus;
+        return matchesSearch && matchesStatus;
+    });
 
     return (
         <ManagerWrapper>
             <Toolbar
                 searchQuery={searchQuery}
                 onSearchChange={(e) => setSearchQuery(e.target.value)}
+                selectedStatus={selectedStatus}
+                onStatusChange={setSelectedStatus}
             />
             <ContractsTable items={filteredItems} />
         </ManagerWrapper>
