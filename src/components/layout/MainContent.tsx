@@ -1,14 +1,17 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
+import { useGetTokens } from '../../hooks/useGetTokens';
+import { useGetContracts, ApiResponse } from '../../hooks/useGetContracts';
 import Dashboard from '../dashboard/Dashboard';
-import {ApiResponse} from '../../hooks/useGetContracts';
-import {formatValue} from '../utils';
+import ContractStatusOverview from '../dashboard/ContractStatusOverview';
+import ContractsByIndustry from '../dashboard/ContractsByIndustry';
+import { formatValue } from '../utils';
 
 const ContentWrapper = styled.main`
-  flex-grow: 1; 
+  flex-grow: 1;
   padding: 2rem 3rem;
   height: 100vh;
-  overflow-y: auto; 
+  overflow-y: auto;
 `;
 
 const PageTitle = styled.h1`
@@ -20,11 +23,23 @@ const PageTitle = styled.h1`
 `;
 
 const PageSubtitle = styled.p`
-    font-size: 1rem;
-    color: #6b7280;
-    margin-top: -0.5rem;
-    margin-bottom: 2.5rem;
-    text-align: left;
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: -0.5rem;
+  margin-bottom: 2.5rem;
+  text-align: left;
+`;
+
+// This new grid will hold our two chart components
+const ChartGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+    }
 `;
 
 interface MainContentProps {
@@ -71,7 +86,13 @@ const MainContent: React.FC<MainContentProps> = ({ contracts }) => {
         <ContentWrapper>
             <PageTitle>Dashboard Overview</PageTitle>
             <PageSubtitle>Comprehensive contract management and AI insights</PageSubtitle>
+
             <Dashboard metrics={kpiMetrics} />
+
+            <ChartGrid>
+                <ContractStatusOverview items={contracts?.responseList || []} />
+                <ContractsByIndustry />
+            </ChartGrid>
         </ContentWrapper>
     );
 };
