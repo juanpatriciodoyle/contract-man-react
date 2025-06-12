@@ -1,5 +1,3 @@
-// src/components/dashboard/ContractStatusOverview.tsx (Updated)
-
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { ResponseItem } from '../../hooks/useGetContracts';
@@ -30,7 +28,7 @@ const ContentWrapper = styled.div`
 const Legend = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2.5rem;
 `;
 
 const LegendItem = styled.div<{ color: string }>`
@@ -54,7 +52,7 @@ const Chart = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem; /* Aligns with legend */
+    gap: 2.5rem;
 `;
 
 const BarWrapper = styled.div`
@@ -71,11 +69,10 @@ const Bar = styled.div`
     overflow: hidden;
 `;
 
-// Update BarFill to accept '$percentage' and '$customColor'
 const BarFill = styled.div<{ $percentage: number; $customColor: string }>`
-    width: ${({ $percentage }) => $percentage}%; // Use $percentage
+    width: ${({ $percentage }) => $percentage}%;
     height: 100%;
-    background-color: ${({ $customColor }) => $customColor}; // Use $customColor
+    background-color: ${({ $customColor }) => $customColor};
     border-radius: 5px;
 `;
 
@@ -131,8 +128,8 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
                             <BarWrapper key={statusInfo.name}>
                                 <Bar>
                                     <BarFill
-                                        $percentage={(count / maxCount) * 100} // Pass $percentage
-                                        $customColor={statusInfo.color} // Pass $customColor
+                                        $percentage={(count / maxCount) * 100}
+                                        $customColor={statusInfo.color}
                                     />
                                 </Bar>
                                 <CountLabel>{count}</CountLabel>
