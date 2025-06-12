@@ -62,7 +62,7 @@ const StyledNavLink = styled(NavLink)`
     color: #111827;
   }
 
-  &.active {
+  &:active {
     background-color: #f3f4f6;
     color: #111827;
   }
