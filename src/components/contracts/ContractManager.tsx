@@ -1,21 +1,26 @@
+// src/components/contracts/ContractManager.tsx
+
 import React from 'react';
 import styled from 'styled-components';
-import {motion} from 'framer-motion';
-import {ChevronDown, Edit, Eye, Search, SlidersHorizontal, Trash2} from 'lucide-react';
-import {ResponseItem} from '../../hooks/useGetContracts';
-import {StatusBadge} from './StatusBadge';
+import { motion } from 'framer-motion';
+import { Eye, Edit, Trash2, Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { ResponseItem } from '../../hooks/useGetContracts';
+import { StatusBadge } from './StatusBadge';
 
+// --- MOCK DATA ---
 const MOCK_CONTRACT_EXTRAS = [
-    {value: '$2.4M', aiScore: 78.31},
-    {value: '$3.2M', aiScore: 68.32},
-    {value: '$750K', aiScore: 74.54},
-    {value: '$950K', aiScore: 67.84},
-    {value: '$1.8M', aiScore: 96.06},
-    {value: 'Unknown', aiScore: 55.00}, // Fallback data
-    {value: 'Unknown', aiScore: 65.00},
-    {value: 'Unknown', aiScore: 75.00},
-    {value: 'Unknown', aiScore: 85.00},
+    { value: '$2.4M', aiScore: 78.31 },
+    { value: '$3.2M', aiScore: 68.32 },
+    { value: '$750K', aiScore: 74.54 },
+    { value: '$950K', aiScore: 67.84 },
+    { value: '$1.8M', aiScore: 96.06 },
+    { value: 'Unknown', aiScore: 55.00 },
+    { value: 'Unknown', aiScore: 65.00 },
+    { value: 'Unknown', aiScore: 75.00 },
+    { value: 'Unknown', aiScore: 85.00 },
 ];
+
+// --- STYLED COMPONENTS ---
 
 const ManagerWrapper = styled.div`
     background-color: #ffffff;
@@ -41,7 +46,6 @@ const SearchInputWrapper = styled.div`
         padding: 0.5rem 0.75rem 0.5rem 2.5rem;
         border-radius: 0.5rem;
         border: 1px solid #d1d5db;
-
         &:focus {
             outline: 2px solid #3b82f6;
             border-color: transparent;
@@ -76,7 +80,11 @@ const Table = styled.table`
     width: 100%;
     border-collapse: collapse;
     text-align: left;
-    color: #374151;
+    color: #1f2937;
+
+    tbody tr:nth-child(even) {
+        background-color: #f9fafb;
+    }
 `;
 
 const Th = styled.th`
@@ -92,22 +100,59 @@ const Td = styled.td`
     padding: 1rem 1rem;
     border-bottom: 1px solid #e5e7eb;
     vertical-align: middle;
+    font-size: 0.875rem;
+`;
+
+const ActionButton = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        color: #3b82f6;
+        background-color: #e5e7eb;
+    }
 `;
 
 const ActionIcons = styled.div`
     display: flex;
-    gap: 1rem;
-    color: #9ca3af;
-
-    svg {
-        cursor: pointer;
-
-        &:hover {
-            color: #3b82f6;
-        }
-    }
+    gap: 0.75rem;
 `;
 
+const Avatar = styled.div`
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+`;
+
+const VendorCell = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+`;
+
+const ContractTitle = styled.div`
+    font-weight: 500;
+`;
+
+// --- THIS IS THE MISSING PART ---
 const AIScoreWrapper = styled.div`
     display: flex;
     align-items: center;
@@ -132,57 +177,71 @@ const ScoreFill = styled.div<{ score: number }>`
 const ScoreText = styled.span`
     font-weight: 500;
     min-width: 50px;
+    color: #4f46e5;
 `;
+// --- END OF MISSING PART ---
+
+
+// --- CHILD COMPONENTS ---
 
 const Toolbar = () => (
     <ToolbarWrapper>
         <SearchInputWrapper>
-            <Search size={18}/>
-            <input type="text" placeholder="Search contracts..."/>
+            <Search size={18} />
+            <input type="text" placeholder="Search contracts..." />
         </SearchInputWrapper>
         <div>
             <FilterButton>
-                <SlidersHorizontal size={16}/> All Status <ChevronDown size={16}/>
+                <SlidersHorizontal size={16} /> All Status <ChevronDown size={16} />
             </FilterButton>
         </div>
     </ToolbarWrapper>
 );
 
-const AIScore: React.FC<{ score: number }> = ({score}) => (
+const AIScore: React.FC<{ score: number }> = ({ score }) => (
     <AIScoreWrapper>
         <ScoreBar>
-            <ScoreFill score={score}/>
+            <ScoreFill score={score} />
         </ScoreBar>
         <ScoreText>{score.toFixed(2)}%</ScoreText>
     </AIScoreWrapper>
 );
-const ContractRow: React.FC<{ contract: ResponseItem; value: string; aiScore: number }> = ({
-                                                                                               contract,
-                                                                                               value,
-                                                                                               aiScore
-                                                                                           }) => (
-    <motion.tr initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.5}}>
+
+const getInitials = (name: string) => {
+    const parts = name.split(' ');
+    if (parts.length > 1) {
+        return `${parts[0][0]}${parts[1][0]}`;
+    }
+    return name.substring(0, 2);
+}
+
+const ContractRow: React.FC<{ contract: ResponseItem; value: string; aiScore: number }> = ({ contract, value, aiScore }) => (
+    <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
         <Td>
-            <div>{contract.TITLE}</div>
-            <div style={{fontSize: '0.8rem', color: '#6b7280'}}>{contract.ID}</div>
+            <ContractTitle>{contract.TITLE}</ContractTitle>
+            <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{contract.ID}</div>
         </Td>
-        <Td>{contract.CDRL_RESPONSIBILITY}</Td>
-        <Td><StatusBadge status={contract['$3']}/></Td>
+        <Td>
+            <VendorCell>
+                <Avatar>{getInitials(contract.CDRL_RESPONSIBILITY)}</Avatar>
+                {contract.CDRL_RESPONSIBILITY}
+            </VendorCell>
+        </Td>
+        <Td><StatusBadge status={contract['$3']} /></Td>
         <Td><strong>{value}</strong></Td>
-        <Td><AIScore score={aiScore}/></Td>
+        <Td><AIScore score={aiScore} /></Td>
         <Td>{contract.CDRL_SUBMIT_DATE}</Td>
         <Td>
             <ActionIcons>
-                <Eye size={18}/>
-                <Edit size={18}/>
-                <Trash2 size={18}/>
+                <ActionButton><Eye size={16} /></ActionButton>
+                <ActionButton><Edit size={16} /></ActionButton>
+                <ActionButton><Trash2 size={16} /></ActionButton>
             </ActionIcons>
         </Td>
     </motion.tr>
 );
 
-// Updated ContractsTable to map and pass mock data
-const ContractsTable: React.FC<{ items: ResponseItem[] }> = ({items}) => (
+const ContractsTable: React.FC<{ items: ResponseItem[] }> = ({ items }) => (
     <TableWrapper>
         <Table>
             <thead>
@@ -214,11 +273,11 @@ interface ContractManagerProps {
     items: ResponseItem[];
 }
 
-const ContractManager: React.FC<ContractManagerProps> = ({items}) => {
+const ContractManager: React.FC<ContractManagerProps> = ({ items }) => {
     return (
         <ManagerWrapper>
-            <Toolbar/>
-            <ContractsTable items={items}/>
+            <Toolbar />
+            <ContractsTable items={items} />
         </ManagerWrapper>
     )
 }
