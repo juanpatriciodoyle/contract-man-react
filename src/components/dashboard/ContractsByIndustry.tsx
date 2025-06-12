@@ -34,14 +34,14 @@ const IndustryItem = styled.li`
 `;
 
 const IconWrapper = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f3f4f6;
-  color: #4b5563;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E0E7FF;
+    color: #4F46E5; 
 `;
 
 const IndustryInfo = styled.div`

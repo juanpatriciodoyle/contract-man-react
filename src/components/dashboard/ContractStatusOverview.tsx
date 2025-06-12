@@ -69,11 +69,11 @@ const Bar = styled.div`
   overflow: hidden;
 `;
 
-const BarFill = styled.div<{ percentage: number }>`
-  width: ${({ percentage }) => percentage}%;
-  height: 100%;
-  background-image: linear-gradient(to right, #4f46e5, #6366f1);
-  border-radius: 5px;
+const BarFill = styled.div<{ percentage: number; customColor: string }>`
+    width: ${({ percentage }) => percentage}%;
+    height: 100%;
+    background-color: ${({ customColor }) => customColor};
+    border-radius: 5px;
 `;
 
 const CountLabel = styled.span`
@@ -100,7 +100,6 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
             'Need More Information': 0,
             'Rejected': 0,
         };
-        // This is a simplified mapping. Adjust if your data's statuses are different.
         items.forEach(item => {
             const status = item['$3'];
             if (status === 'Approved' || status === 'Accepted') counts['Approved']++;
@@ -127,7 +126,7 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
                         return (
                             <BarWrapper key={statusInfo.name}>
                                 <Bar>
-                                    <BarFill percentage={(count / maxCount) * 100} />
+                                    <BarFill percentage={(count / maxCount) * 100} customColor={statusInfo.color} />
                                 </Bar>
                                 <CountLabel>{count}</CountLabel>
                             </BarWrapper>
