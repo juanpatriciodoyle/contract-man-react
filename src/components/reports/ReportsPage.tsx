@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {Check, Clock, DollarSign, Download, FileText, Users, Zap} from 'lucide-react';
+import {Check, Clock, DollarSign, Download, FileText, Users} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {Subtitle, Title} from '../ui/text';
 import StatusProgressBarChart from '../ui/statusProgressBarChart';
+import {jsPDF} from 'jspdf';
+import html2canvas from 'html2canvas';
+import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
+import JSZip from 'jszip';
 
 const PageWrapper = styled.div`
     flex-grow: 1;
@@ -157,7 +162,6 @@ const ExportButton = styled.button`
     }
 `;
 
-
 const containerVariants = {
     hidden: {opacity: 0},
     visible: {
@@ -264,12 +268,160 @@ const RISK_ANALYSIS_CATEGORY_DATA = [
 ];
 
 const ReportsPage: React.FC = () => {
+    const handleExportPdf = async () => {
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const margin = 10;
+        let cursorY = margin;
+
+        const sectionsToExport = [
+            document.getElementById('kpi-section'),
+            document.getElementById('monthly-trends-section'),
+            document.getElementById('top-vendors-section-wrapper'),
+            document.getElementById('risk-analysis-section'),
+            document.getElementById('export-options-section'),
+        ];
+
+        const addHeaderAndFooter = (pageNumber: number, totalPages: number) => {
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text("HCLSoftware - Contract Man", margin, margin);
+            pdf.text(`Page ${pageNumber} of ${totalPages}`, pdfWidth - margin, margin, {align: 'right'});
+        };
+
+        let currentPage = 1;
+
+        addHeaderAndFooter(currentPage, 0);
+
+        for (const section of sectionsToExport) {
+            if (section) {
+                const canvas = await html2canvas(section, {
+                    scale: 3,
+                    useCORS: true,
+                    logging: false,
+                    scrollY: -window.scrollY,
+                    windowWidth: document.documentElement.offsetWidth,
+                    windowHeight: document.documentElement.offsetHeight,
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = pdfWidth - (2 * margin);
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                if (cursorY + imgHeight + margin > pdfHeight) {
+                    pdf.addPage();
+                    currentPage++;
+                    cursorY = margin;
+                    addHeaderAndFooter(currentPage, 0);
+                }
+
+                pdf.addImage(imgData, 'PNG', margin, cursorY, imgWidth, imgHeight);
+                cursorY += imgHeight + margin;
+            }
+        }
+
+        const totalPages = pdf.internal.pages.length - 1;
+
+        for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            addHeaderAndFooter(i, totalPages);
+        }
+
+        pdf.save('ContractMan_Reports_Outstanding.pdf');
+    };
+
+    const handleExportExcel = () => {
+        const workbook = XLSX.utils.book_new();
+
+        const kpiFlatData = KPI_REPORTS_DATA.map(kpi => ({
+            Title: kpi.title,
+            Value: kpi.value,
+            Change: kpi.change,
+            Trend: kpi.$trend,
+        }));
+        XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(kpiFlatData), "KPI Summary");
+
+        XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(MONTHLY_CONTRACT_TRENDS_DATA), "Monthly Trends");
+
+        const vendorsFlatData = TOP_PERFORMING_VENDORS_DATA.map(vendor => ({
+            Vendor: vendor.label,
+            Count: vendor.count,
+            Value: vendor.value,
+            ApprovalPercentage: `${vendor.percentage}%`,
+        }));
+        XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(vendorsFlatData), "Top Vendors");
+
+        const riskFlatData: any[] = [];
+        RISK_ANALYSIS_CATEGORY_DATA.forEach(category => {
+            category.levels.forEach(level => {
+                riskFlatData.push({
+                    Category: category.category,
+                    Level: level.label,
+                    Percentage: `${level.percentage}%`,
+                });
+            });
+        });
+        XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(riskFlatData), "Risk Analysis");
+
+        const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+        const data = new Blob([excelBuffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'});
+        FileSaver.saveAs(data, 'ContractMan_Full_Report.xlsx');
+    };
+
+    const handleExportCsv = () => {
+        const allData: any[] = [];
+
+        allData.push(['--- KPI Summary ---']);
+        allData.push(['Title', 'Value', 'Change', 'Trend']);
+        KPI_REPORTS_DATA.forEach(kpi => {
+            allData.push([kpi.title, kpi.value, kpi.change, kpi.$trend]);
+        });
+        allData.push(['']);
+
+        allData.push(['--- Monthly Contract Trends ---']);
+        allData.push(['Month', 'Contracts', 'Value', 'Approved']);
+        MONTHLY_CONTRACT_TRENDS_DATA.forEach(item => {
+            allData.push([item.month, item.contracts, item.value, item.approved]);
+        });
+        allData.push(['']);
+
+        allData.push(['--- Top Performing Vendors ---']);
+        allData.push(['Vendor', 'Count', 'Value', 'ApprovalPercentage']);
+        TOP_PERFORMING_VENDORS_DATA.forEach(vendor => {
+            allData.push([vendor.label, vendor.count, vendor.value, `${vendor.percentage}%`]);
+        });
+        allData.push(['']);
+
+        allData.push(['--- Risk Analysis by Category ---']);
+        allData.push(['Category', 'Level', 'Percentage']);
+        RISK_ANALYSIS_CATEGORY_DATA.forEach(category => {
+            category.levels.forEach(level => {
+                allData.push([category.category, level.label, `${level.percentage}%`]);
+            });
+        });
+        allData.push(['']);
+
+        const csvContent = allData.map(row =>
+            row.map((field: any) => {
+                let value = String(field);
+                if (value.includes(',') || value.includes('\n') || value.includes('"')) {
+                    value = `"${value.replace(/"/g, '""')}"`;
+                }
+                return value;
+            }).join(',')
+        ).join('\n');
+
+        const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+        FileSaver.saveAs(blob, "ContractMan_Full_Report.csv");
+    };
+
     return (
         <PageWrapper>
             <Title>Reports & Analytics</Title>
             <Subtitle>Comprehensive insights and performance metrics</Subtitle>
 
-            <AnalyticsGrid variants={containerVariants} initial="hidden" animate="visible">
+            <AnalyticsGrid id="kpi-section" variants={containerVariants} initial="hidden" animate="visible">
                 {KPI_REPORTS_DATA.map((card) => (
                     <motion.div key={card.title} variants={itemVariants}>
                         <KPICard
@@ -285,7 +437,7 @@ const ReportsPage: React.FC = () => {
             </AnalyticsGrid>
 
             <ChartGrid>
-                <CardWrapper>
+                <CardWrapper id="monthly-trends-section">
                     <SectionTitle>
                         Monthly Contract Trends
                     </SectionTitle>
@@ -300,28 +452,27 @@ const ReportsPage: React.FC = () => {
                         ))}
                     </ul>
                 </CardWrapper>
-                <StatusProgressBarChart
-                    title="Top Performing Vendors"
-                    data={TOP_PERFORMING_VENDORS_DATA.map(item => ({
-                        label: item.label,
-                        count: item.count,
-                        percentage: item.percentage,
-                        color: item.color,
-                        value: item.value
-                    }))}
-                    showItemCountAndPercentage={false}
-                    showItemValue={true}
-                    showLeftIcon={false}
-                    fontScale={0.9}
-                    titleIcon={Users}
-                />
+                <div id="top-vendors-section-wrapper">
+                    <StatusProgressBarChart
+                        title="Top Performing Vendors"
+                        data={TOP_PERFORMING_VENDORS_DATA.map(item => ({
+                            label: item.label,
+                            count: item.count,
+                            percentage: item.percentage,
+                            color: item.color,
+                            value: item.value
+                        }))}
+                        showItemCountAndPercentage={false}
+                        showItemValue={true}
+                        showLeftIcon={false}
+                        fontScale={0.9}
+                        titleIcon={Users}
+                    />
+                </div>
             </ChartGrid>
 
-            <SectionTitle>
-                <Zap size={20}/>
-                Risk Analysis by Category
-            </SectionTitle>
-            <RiskAnalysisGrid variants={containerVariants} initial="hidden" animate="visible">
+            <SectionTitle>Risk Analysis by Category</SectionTitle>
+            <RiskAnalysisGrid id="risk-analysis-section" variants={containerVariants} initial="hidden" animate="visible">
                 {RISK_ANALYSIS_CATEGORY_DATA.map((categoryData) => (
                     <motion.div key={categoryData.category} variants={itemVariants}>
                         <RiskCategoryCard>
@@ -342,18 +493,18 @@ const ReportsPage: React.FC = () => {
                 ))}
             </RiskAnalysisGrid>
 
-            <ExportOptionsContainer>
+            <ExportOptionsContainer id="export-options-section">
                 <SectionTitle>Export Options</SectionTitle>
                 <ExportButtons>
-                    <ExportButton>
+                    <ExportButton onClick={handleExportPdf}>
                         <Download size={16}/>
                         Export as PDF
                     </ExportButton>
-                    <ExportButton>
+                    <ExportButton onClick={handleExportExcel}>
                         <Download size={16}/>
                         Export as Excel
                     </ExportButton>
-                    <ExportButton>
+                    <ExportButton onClick={handleExportCsv}>
                         <Download size={16}/>
                         Export as CSV
                     </ExportButton>
