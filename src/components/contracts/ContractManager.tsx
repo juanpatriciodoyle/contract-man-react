@@ -63,7 +63,7 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
         return matchesSearch && matchesStatus;
     });
 
-    const contractColumns: TableColumn<ContractTableItem>[] = [
+    const CONTRACT_COLUMNS: TableColumn<ContractTableItem>[] = [
         {
             key: 'title',
             label: 'Contract',
@@ -128,7 +128,7 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
 
     return (
         <Table<ContractTableItem>
-            columns={contractColumns}
+            columns={CONTRACT_COLUMNS}
             data={filteredItems}
             emptyMessage="No contracts found."
             showToolbar={true}

@@ -34,7 +34,7 @@ const DashboardGrid = styled(motion.div)`
     }
 `;
 
-const containerVariants = {
+const CONTAINER_VARIANTS = {
     hidden: {opacity: 0},
     visible: {
         opacity: 1,
@@ -44,7 +44,7 @@ const containerVariants = {
     }
 };
 
-const itemVariants = {
+const ITEM_VARIANTS = {
     hidden: {y: 20, opacity: 0},
     visible: {
         y: 0,
@@ -53,56 +53,56 @@ const itemVariants = {
 };
 
 const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
-    const KPI_DATA = [
+    const DASHBOARD_KPI_DATA = [
         {
             title: "AVG. PROCESSING TIME",
             value: "4.2 days",
             change: "-12% from last month",
-            $trend: "down",
+            $trend: "down" as 'up' | 'down' | 'warning',
             icon: Clock,
-            $color: "blue",
+            $color: "blue" as 'blue' | 'green' | 'yellow' | 'purple',
         },
         {
             title: "APPROVAL RATE",
             value: metrics.approvalRate,
             change: "+5% from last month",
-            $trend: "up",
+            $trend: "up" as 'up' | 'down' | 'warning',
             icon: Check,
-            $color: "green",
+            $color: "green" as 'blue' | 'green' | 'yellow' | 'purple',
         },
         {
             title: "EXPIRING (30 DAYS)",
             value: String(metrics.expiringCount),
             change: "Needs attention",
-            $trend: "warning",
+            $trend: "warning" as 'up' | 'down' | 'warning',
             icon: Calendar,
-            $color: "yellow",
+            $color: "yellow" as 'blue' | 'green' | 'yellow' | 'purple',
         },
         {
             title: "TOTAL CONTRACT VALUE",
             value: metrics.totalValue,
             change: "+18% from last quarter",
-            $trend: "up",
+            $trend: "up" as 'up' | 'down' | 'warning',
             icon: DollarSign,
-            $color: "purple",
+            $color: "purple" as 'blue' | 'green' | 'yellow' | 'purple',
         },
     ];
 
     return (
         <DashboardGrid
-            variants={containerVariants}
+            variants={CONTAINER_VARIANTS}
             initial="hidden"
             animate="visible"
         >
-            {KPI_DATA.map((card) => (
-                <motion.div key={card.title} variants={itemVariants}>
+            {DASHBOARD_KPI_DATA.map((card) => (
+                <motion.div key={card.title} variants={ITEM_VARIANTS}>
                     <KPICard
                         title={card.title}
                         value={card.value}
                         change={card.change}
-                        $trend={card.$trend as 'up' | 'down' | 'warning'}
+                        $trend={card.$trend}
                         icon={card.icon}
-                        $color={card.$color as 'blue' | 'green' | 'yellow' | 'purple'} // Pass $color
+                        $color={card.$color}
                     />
                 </motion.div>
             ))}

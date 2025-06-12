@@ -73,70 +73,70 @@ interface VendorItem {
     registeredDate: string;
 }
 
+const CONTAINER_VARIANTS = {
+    hidden: {opacity: 0},
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+        }
+    }
+};
+
+const ITEM_VARIANTS = {
+    hidden: {y: 20, opacity: 0},
+    visible: {
+        y: 0,
+        opacity: 1,
+    }
+};
+
 const VendorPortalPage: React.FC = () => {
-    const vendorMetrics = {
+    const VENDOR_METRICS = {
         totalVendors: '0',
         verified: '0',
         pending: '0',
         rejected: '0',
     };
 
-    const KPI_DATA = [
+    const VENDOR_KPI_DATA = [
         {
             title: "TOTAL VENDORS",
-            value: vendorMetrics.totalVendors,
+            value: VENDOR_METRICS.totalVendors,
             change: "",
-            $trend: "up",
+            $trend: "up" as 'up' | 'down' | 'warning',
             icon: Users,
-            $color: "blue", // Use $color
+            $color: "blue" as 'blue' | 'green' | 'yellow' | 'purple',
         },
         {
             title: "VERIFIED",
-            value: vendorMetrics.verified,
+            value: VENDOR_METRICS.verified,
             change: "",
-            $trend: "up",
+            $trend: "up" as 'up' | 'down' | 'warning',
             icon: CheckCircle,
-            $color: "green", // Use $color
+            $color: "green" as 'blue' | 'green' | 'yellow' | 'purple',
         },
         {
             title: "PENDING",
-            value: vendorMetrics.pending,
+            value: VENDOR_METRICS.pending,
             change: "",
-            $trend: "warning",
+            $trend: "warning" as 'up' | 'down' | 'warning',
             icon: Clock,
-            $color: "yellow", // Use $color
+            $color: "yellow" as 'blue' | 'green' | 'yellow' | 'purple',
         },
         {
             title: "REJECTED",
-            value: vendorMetrics.rejected,
+            value: VENDOR_METRICS.rejected,
             change: "",
-            $trend: "down",
+            $trend: "down" as 'up' | 'down' | 'warning',
             icon: AlertTriangle,
-            $color: "purple", // Use $color
+            $color: "purple" as 'blue' | 'green' | 'yellow' | 'purple',
         },
     ];
 
-    const containerVariants = {
-        hidden: {opacity: 0},
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.15,
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: {y: 20, opacity: 0},
-        visible: {
-            y: 0,
-            opacity: 1,
-        }
-    };
-
     const vendorTableData: VendorItem[] = [];
 
-    const vendorColumns: TableColumn<VendorItem>[] = [
+    const VENDOR_COLUMNS: TableColumn<VendorItem>[] = [
         {key: 'company', label: 'Company', renderCell: (item) => <>{item.company}</>},
         {key: 'contact', label: 'Contact', renderCell: (item) => <>{item.contact}</>},
         {key: 'industry', label: 'Industry', renderCell: (item) => <>{item.industry}</>},
@@ -167,7 +167,7 @@ const VendorPortalPage: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
 
-    const toolbarProps = {
+    const TOOLBAR_PROPS = {
         searchQuery: searchQuery,
         onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
         selectedFilter: selectedFilter,
@@ -177,7 +177,6 @@ const VendorPortalPage: React.FC = () => {
         showSearch: true,
         showFilter: false,
     };
-
 
     return (
         <PageWrapper>
@@ -193,19 +192,19 @@ const VendorPortalPage: React.FC = () => {
             </PageHeader>
 
             <KpiGrid
-                variants={containerVariants}
+                variants={CONTAINER_VARIANTS}
                 initial="hidden"
                 animate="visible"
             >
-                {KPI_DATA.map((card) => (
-                    <CardRowItem key={card.title} variants={itemVariants}>
+                {VENDOR_KPI_DATA.map((card) => (
+                    <CardRowItem key={card.title} variants={ITEM_VARIANTS}>
                         <KPICard
                             title={card.title}
                             value={card.value}
                             change={card.change}
-                            $trend={card.$trend as 'up' | 'down' | 'warning'}
+                            $trend={card.$trend}
                             icon={card.icon}
-                            $color={card.$color as 'blue' | 'green' | 'yellow' | 'purple'} // Pass $color
+                            $color={card.$color}
                         />
                     </CardRowItem>
                 ))}
@@ -213,11 +212,11 @@ const VendorPortalPage: React.FC = () => {
 
             <SectionTitle>Vendor Management ({vendorTableData.length})</SectionTitle>
             <Table<VendorItem>
-                columns={vendorColumns}
+                columns={VENDOR_COLUMNS}
                 data={vendorTableData}
                 emptyMessage="No vendors registered yet"
                 showToolbar={false}
-                toolbarProps={toolbarProps}
+                toolbarProps={TOOLBAR_PROPS}
             />
         </PageWrapper>
     );

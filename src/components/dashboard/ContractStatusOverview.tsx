@@ -6,6 +6,13 @@ interface OverviewProps {
     items: ResponseItem[];
 }
 
+const STATUS_COLORS_DATA = [
+    { name: 'Approved', color: '#10B981' },
+    { name: 'Pending Review', color: '#FBBF24' },
+    { name: 'Need More Information', color: '#F97316' },
+    { name: 'Rejected', color: '#EF4444' },
+];
+
 const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
     const statusCounts = useMemo(() => {
         const counts = {
@@ -24,12 +31,7 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
         return counts;
     }, [items]);
 
-    const CHART_DATA = [
-        { name: 'Approved', color: '#10B981' },
-        { name: 'Pending Review', color: '#FBBF24' },
-        { name: 'Need More Information', color: '#F97316' },
-        { name: 'Rejected', color: '#EF4444' },
-    ].map(statusInfo => ({
+    const CHART_DATA = STATUS_COLORS_DATA.map(statusInfo => ({
         label: statusInfo.name,
         count: statusCounts[statusInfo.name as keyof typeof statusCounts] || 0,
         percentage: items.length > 0 ? Math.round(((statusCounts[statusInfo.name as keyof typeof statusCounts] || 0) / items.length) * 100) : 0,
