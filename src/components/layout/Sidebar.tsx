@@ -19,7 +19,6 @@ const LogoWrapper = styled.div`
     align-items: center;
     gap: 12px;
     padding: 0 0.5rem;
-    margin-bottom: 2.5rem;
 `;
 
 const LogoIcon = styled.div`
@@ -102,6 +101,13 @@ const NotificationBadge = styled.span`
     border-radius: 9999px;
 `;
 
+
+const SeparatorLine = styled.div`
+  border-bottom: 1px solid #e5e7eb; 
+  margin: 1.5rem 0;
+  width: 100%; 
+`;
+
 interface SidebarProps {
     contractCount: number;
 }
@@ -113,6 +119,7 @@ const Sidebar: React.FC<SidebarProps> = ({ contractCount }) => {
                 <LogoIcon><Bot size={24} /></LogoIcon>
                 <AppTitle>ContractFlow</AppTitle>
             </LogoWrapper>
+            <SeparatorLine/>
             <NavList>
                 <StyledNavLink to="/">
                     <LinkContent>

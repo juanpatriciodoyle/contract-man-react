@@ -17,7 +17,6 @@ const AppWrapper = styled.div`
 const AppLayout: React.FC<{ contractCount: number }> = ({contractCount}) => (
     <AppWrapper>
         <Sidebar contractCount={contractCount}/>
-        {/* The Outlet will render the matched route's element (MainContent or ContractsPage) */}
         <Outlet/>
     </AppWrapper>
 );
