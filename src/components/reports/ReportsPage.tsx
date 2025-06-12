@@ -20,6 +20,7 @@ const PageWrapper = styled.div`
 const AnalyticsGrid = styled(motion.div)`
     width: 100%;
     padding: 0;
+
     display: grid;
     gap: 2.5rem;
 
@@ -79,6 +80,12 @@ const MonthlyTrendItem = styled.li`
         font-size: 0.9rem;
         color: #4b5563;
     }
+`;
+
+const MonthlyTrendList = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0;
 `;
 
 const RiskAnalysisGrid = styled(AnalyticsGrid)`
@@ -159,6 +166,7 @@ const ExportButton = styled.button`
         color: #6b7280;
     }
 `;
+
 
 const containerVariants = {
     hidden: {opacity: 0},
@@ -439,7 +447,7 @@ const ReportsPage: React.FC = () => {
                     <SectionTitle>
                         Monthly Contract Trends
                     </SectionTitle>
-                    <ul>
+                    <MonthlyTrendList>
                         {MONTHLY_CONTRACT_TRENDS_DATA.map((item) => (
                             <MonthlyTrendItem key={item.month}>
                                 <span>{item.month}</span>
@@ -448,7 +456,7 @@ const ReportsPage: React.FC = () => {
                                 <span>{item.approved} approved</span>
                             </MonthlyTrendItem>
                         ))}
-                    </ul>
+                    </MonthlyTrendList>
                 </CardWrapper>
                 <div id="top-vendors-section-wrapper">
                     <StatusProgressBarChart
