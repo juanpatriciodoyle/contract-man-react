@@ -1,42 +1,48 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import { Users, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import {AlertTriangle, CheckCircle, Clock, Users} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import {Subtitle, Title} from "../ui/text";
-import {Table} from "../ui/table";
+import Table, {TableColumn} from '../ui/table/table';
+import {Chip} from '../ui/chip';
+import {ActionButton, ActionIcons} from '../ui/table/tableElements';
 
 const PageWrapper = styled.div`
-  flex-grow: 1;
-  padding: 2rem 3rem;
-  height: 100vh;
-  overflow-y: auto;
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    height: 100vh;
+    overflow-y: auto;
 `;
 
 const PageHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
 `;
 
 const RegisterButton = styled.button`
-  background-color: #4f46e5;
-  color: #ffffff;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.2s ease-in-out;
+    background-color: #4f46e5;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: #4338ca;
-  }
+    &:hover {
+        background-color: #4338ca;
+    }
 `;
 
 const KpiGrid = styled(motion.div)`
     display: grid;
-    gap: 2.5rem; /* Consistent with DashboardGrid spacing */
+    gap: 2.5rem;
     grid-template-columns: repeat(1, 1fr);
     margin-bottom: 2.5rem;
 
@@ -51,19 +57,21 @@ const KpiGrid = styled(motion.div)`
 
 const CardRowItem = styled(motion.div)``;
 
-const VendorManagementSection = styled.div`
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+const SectionTitle = styled.h3`
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 1.5rem 0;
 `;
 
-const SectionTitle = styled.h3`
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 1.5rem 0;
-`;
+interface VendorItem {
+    id: string;
+    company: string;
+    contact: string;
+    industry: string;
+    status: string;
+    registeredDate: string;
+}
 
 const VendorPortalPage: React.FC = () => {
     const vendorMetrics = {
@@ -77,8 +85,8 @@ const VendorPortalPage: React.FC = () => {
         {
             title: "TOTAL VENDORS",
             value: vendorMetrics.totalVendors,
-            change: "", // No change text visible in screenshot
-            trend: "up", // Default, could be 'neutral' or removed if no trend
+            change: "",
+            trend: "up",
             icon: Users,
             color: "blue",
         },
@@ -126,6 +134,58 @@ const VendorPortalPage: React.FC = () => {
         }
     };
 
+    // Mock data for the Vendor Management table
+    const vendorTableData: VendorItem[] = [
+        // Add some mock data to see the table in action, e.g.:
+        // { id: 'v1', company: 'Tech Solutions Inc.', contact: 'Alice Wonderland', industry: 'Technology', status: 'verified', registeredDate: '2023-01-15' },
+        // { id: 'v2', company: 'Health Innovations', contact: 'Bob The Builder', industry: 'Healthcare', status: 'pending', registeredDate: '2023-02-20' },
+        // { id: 'v3', company: 'Finance Pros', contact: 'Charlie Chaplin', industry: 'Finance', status: 'rejected', registeredDate: '2023-03-01' },
+    ];
+
+
+    const vendorColumns: TableColumn<VendorItem>[] = [
+        {key: 'company', label: 'Company', renderCell: (item) => <>{item.company}</>},
+        {key: 'contact', label: 'Contact', renderCell: (item) => <>{item.contact}</>},
+        {key: 'industry', label: 'Industry', renderCell: (item) => <>{item.industry}</>},
+        {
+            key: 'status',
+            label: 'Status',
+            renderCell: (item) => {
+                let chipType: 'approved' | 'pending-review' | 'need-more-info' | 'rejected' | 'ai-review' | 'accepted' | 'unknown' = 'unknown';
+                if (item.status === 'verified') chipType = 'approved';
+                else if (item.status === 'pending') chipType = 'pending-review';
+                else if (item.status === 'rejected') chipType = 'rejected';
+
+                return <Chip type={chipType}>{item.status}</Chip>;
+            },
+        },
+        {key: 'registeredDate', label: 'Registered', renderCell: (item) => <>{item.registeredDate}</>},
+        {
+            key: 'actions',
+            label: 'Actions',
+            renderCell: () => (
+                <ActionIcons>
+                    <ActionButton><Users size={16}/></ActionButton>
+                </ActionIcons>
+            ),
+        },
+    ];
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState('All');
+
+    const toolbarProps = {
+        searchQuery: searchQuery,
+        onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
+        selectedFilter: selectedFilter,
+        onFilterChange: setSelectedFilter,
+        filterOptions: ["All", "Active", "Inactive"],
+        placeholder: "Search vendors...",
+        showSearch: true,
+        showFilter: false,
+    };
+
+
     return (
         <PageWrapper>
             <PageHeader>
@@ -134,7 +194,8 @@ const VendorPortalPage: React.FC = () => {
                     <Subtitle>Manage vendor accounts and verification status</Subtitle>
                 </div>
                 <RegisterButton>
-                    + Register Vendor
+                    <Users size={20} style={{marginRight: '0.5rem'}}/>
+                    Register Vendor
                 </RegisterButton>
             </PageHeader>
 
@@ -157,28 +218,14 @@ const VendorPortalPage: React.FC = () => {
                 ))}
             </KpiGrid>
 
-            <VendorManagementSection>
-                <SectionTitle>Vendor Management (0)</SectionTitle>
-                <Table>
-                    <thead>
-                    <tr>
-                        <th>Company</th>
-                        <th>Contact</th>
-                        <th>Industry</th>
-                        <th>Status</th>
-                        <th>Registered</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
-                            No vendors registered yet
-                        </td>
-                    </tr>
-                    </tbody>
-                </Table>
-            </VendorManagementSection>
+            <SectionTitle>Vendor Management ({vendorTableData.length})</SectionTitle>
+            <Table<VendorItem>
+                columns={vendorColumns}
+                data={vendorTableData}
+                emptyMessage="No vendors registered yet"
+                showToolbar={false}
+                toolbarProps={toolbarProps}
+            />
         </PageWrapper>
     );
 };
