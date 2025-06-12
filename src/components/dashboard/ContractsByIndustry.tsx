@@ -10,7 +10,6 @@ const CardWrapper = styled.div`
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1rem;
   font-weight: 600;
   color: #111827;
   margin: 0 0 1.5rem 0;

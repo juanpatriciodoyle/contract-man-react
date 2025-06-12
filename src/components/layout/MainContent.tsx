@@ -69,7 +69,7 @@ const MainContent: React.FC<MainContentProps> = ({contracts}) => {
 
     return (
         <ContentWrapper>
-            <Title>Dashboard Overview</Title>
+            <Title>Overview</Title>
             <Subtitle>Comprehensive contract management and AI insights</Subtitle>
 
             <Dashboard metrics={kpiMetrics}/>
