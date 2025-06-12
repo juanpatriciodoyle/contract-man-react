@@ -1,19 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {FileText, DollarSign, Clock, Check, BarChart2} from 'lucide-react';
+import {Check, Clock, DollarSign, Download, FileText, Users, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {Subtitle, Title} from '../ui/text';
 import StatusProgressBarChart from '../ui/statusProgressBarChart';
 
-const PAGE_WRAPPER = styled.div`
+const PageWrapper = styled.div`
     flex-grow: 1;
     padding: 2rem 2rem;
     height: 100vh;
     overflow-y: auto;
 `;
 
-const ANALYTICS_GRID = styled(motion.div)`
+const AnalyticsGrid = styled(motion.div)`
     width: 100%;
     padding: 0;
 
@@ -33,18 +33,19 @@ const ANALYTICS_GRID = styled(motion.div)`
     margin: 0 auto 2.5rem;
 `;
 
-const CHART_GRID = styled.div`
+const ChartGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
 
     @media (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
 `;
 
-const CARD_WRAPPER = styled.div`
+const CardWrapper = styled.div`
     background-color: #ffffff;
     height: fit-content;
     border-radius: 0.75rem;
@@ -52,7 +53,7 @@ const CARD_WRAPPER = styled.div`
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
 `;
 
-const SECTION_TITLE = styled.h3`
+const SectionTitle = styled.h3`
     font-weight: 600;
     color: #111827;
     margin: 0 0 1.5rem 0;
@@ -61,7 +62,7 @@ const SECTION_TITLE = styled.h3`
     gap: 0.5rem;
 `;
 
-const MONTHLY_TREND_ITEM = styled.li`
+const MonthlyTrendItem = styled.li`
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 0;
@@ -77,7 +78,87 @@ const MONTHLY_TREND_ITEM = styled.li`
     }
 `;
 
-const CONTAINER_VARIANTS = {
+const RiskAnalysisGrid = styled(AnalyticsGrid)`
+    grid-template-columns: repeat(1, 1fr);
+    margin-top: 2.5rem;
+
+    @media (min-width: 640px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+`;
+
+const RiskCategoryCard = styled(CardWrapper)`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+const RiskLevelRow = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #4b5563;
+`;
+
+const RiskLevelBarContainer = styled.div`
+    flex-grow: 1;
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 0.5rem;
+`;
+
+const RiskLevelBarFill = styled.div<{ $width: string; $color: string }>`
+    width: ${({$width}) => $width};
+    height: 100%;
+    background-color: ${({$color}) => $color};
+    border-radius: 4px;
+`;
+
+const ExportOptionsContainer = styled(CardWrapper)`
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+const ExportButtons = styled.div`
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+`;
+
+const ExportButton = styled.button`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: #e5e7eb;
+        color: #111827;
+    }
+
+    svg {
+        color: #6b7280;
+    }
+`;
+
+
+const containerVariants = {
     hidden: {opacity: 0},
     visible: {
         opacity: 1,
@@ -87,7 +168,7 @@ const CONTAINER_VARIANTS = {
     },
 };
 
-const ITEM_VARIANTS = {
+const itemVariants = {
     hidden: {y: 20, opacity: 0},
     visible: {
         y: 0,
@@ -147,15 +228,50 @@ const TOP_PERFORMING_VENDORS_DATA = [
     {label: 'Digital Services', count: 9, value: '$2.7M', percentage: 91, color: '#2563EB'},
 ];
 
+const RISK_ANALYSIS_CATEGORY_DATA = [
+    {
+        category: 'Financial Risk',
+        levels: [
+            {label: 'Low', percentage: 65, color: '#10B981'},
+            {label: 'Medium', percentage: 25, color: '#FBBF24'},
+            {label: 'High', percentage: 10, color: '#EF4444'},
+        ],
+    },
+    {
+        category: 'Compliance Risk',
+        levels: [
+            {label: 'Low', percentage: 70, color: '#10B981'},
+            {label: 'Medium', percentage: 20, color: '#FBBF24'},
+            {label: 'High', percentage: 10, color: '#EF4444'},
+        ],
+    },
+    {
+        category: 'Operational Risk',
+        levels: [
+            {label: 'Low', percentage: 55, color: '#10B981'},
+            {label: 'Medium', percentage: 35, color: '#FBBF24'},
+            {label: 'High', percentage: 10, color: '#EF4444'},
+        ],
+    },
+    {
+        category: 'Legal Risk',
+        levels: [
+            {label: 'Low', percentage: 80, color: '#10B981'},
+            {label: 'Medium', percentage: 15, color: '#FBBF24'},
+            {label: 'High', percentage: 5, color: '#EF4444'},
+        ],
+    },
+];
+
 const ReportsPage: React.FC = () => {
     return (
-        <PAGE_WRAPPER>
+        <PageWrapper>
             <Title>Reports & Analytics</Title>
             <Subtitle>Comprehensive insights and performance metrics</Subtitle>
 
-            <ANALYTICS_GRID variants={CONTAINER_VARIANTS} initial="hidden" animate="visible">
+            <AnalyticsGrid variants={containerVariants} initial="hidden" animate="visible">
                 {KPI_REPORTS_DATA.map((card) => (
-                    <motion.div key={card.title} variants={ITEM_VARIANTS}>
+                    <motion.div key={card.title} variants={itemVariants}>
                         <KPICard
                             title={card.title}
                             value={card.value}
@@ -166,25 +282,24 @@ const ReportsPage: React.FC = () => {
                         />
                     </motion.div>
                 ))}
-            </ANALYTICS_GRID>
+            </AnalyticsGrid>
 
-            <CHART_GRID>
-                <CARD_WRAPPER>
-                    <SECTION_TITLE>
-                        <BarChart2 size={20}/>
+            <ChartGrid>
+                <CardWrapper>
+                    <SectionTitle>
                         Monthly Contract Trends
-                    </SECTION_TITLE>
+                    </SectionTitle>
                     <ul>
                         {MONTHLY_CONTRACT_TRENDS_DATA.map((item) => (
-                            <MONTHLY_TREND_ITEM key={item.month}>
+                            <MonthlyTrendItem key={item.month}>
                                 <span>{item.month}</span>
                                 <span>{item.contracts} contracts</span>
                                 <span>{item.value}</span>
                                 <span>{item.approved} approved</span>
-                            </MONTHLY_TREND_ITEM>
+                            </MonthlyTrendItem>
                         ))}
                     </ul>
-                </CARD_WRAPPER>
+                </CardWrapper>
                 <StatusProgressBarChart
                     title="Top Performing Vendors"
                     data={TOP_PERFORMING_VENDORS_DATA.map(item => ({
@@ -198,10 +313,53 @@ const ReportsPage: React.FC = () => {
                     showItemValue={true}
                     showLeftIcon={false}
                     fontScale={0.9}
-                    titleIcon={BarChart2}
+                    titleIcon={Users}
                 />
-            </CHART_GRID>
-        </PAGE_WRAPPER>
+            </ChartGrid>
+
+            <SectionTitle>
+                <Zap size={20}/>
+                Risk Analysis by Category
+            </SectionTitle>
+            <RiskAnalysisGrid variants={containerVariants} initial="hidden" animate="visible">
+                {RISK_ANALYSIS_CATEGORY_DATA.map((categoryData) => (
+                    <motion.div key={categoryData.category} variants={itemVariants}>
+                        <RiskCategoryCard>
+                            <h4 style={{margin: 0, color: '#111827', fontWeight: 600}}>
+                                {categoryData.category}
+                            </h4>
+                            {categoryData.levels.map((level) => (
+                                <RiskLevelRow key={level.label}>
+                                    <span>{level.label}</span>
+                                    <RiskLevelBarContainer>
+                                        <RiskLevelBarFill $width={`${level.percentage}%`} $color={level.color}/>
+                                    </RiskLevelBarContainer>
+                                    <span>{level.percentage}%</span>
+                                </RiskLevelRow>
+                            ))}
+                        </RiskCategoryCard>
+                    </motion.div>
+                ))}
+            </RiskAnalysisGrid>
+
+            <ExportOptionsContainer>
+                <SectionTitle>Export Options</SectionTitle>
+                <ExportButtons>
+                    <ExportButton>
+                        <Download size={16}/>
+                        Export as PDF
+                    </ExportButton>
+                    <ExportButton>
+                        <Download size={16}/>
+                        Export as Excel
+                    </ExportButton>
+                    <ExportButton>
+                        <Download size={16}/>
+                        Export as CSV
+                    </ExportButton>
+                </ExportButtons>
+            </ExportOptionsContainer>
+        </PageWrapper>
     );
 };
 
