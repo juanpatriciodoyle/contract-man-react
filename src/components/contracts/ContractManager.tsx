@@ -1,6 +1,4 @@
-// src/components/contracts/ContractManager.tsx
-
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Eye, Edit, Trash2, Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
@@ -8,6 +6,7 @@ import { ResponseItem } from '../../hooks/useGetContracts';
 import { StatusBadge } from './StatusBadge';
 
 // --- MOCK DATA ---
+// This data is used to fill the "Value" and "AI Score" columns for the demo.
 const MOCK_CONTRACT_EXTRAS = [
     { value: '$2.4M', aiScore: 78.31 },
     { value: '$3.2M', aiScore: 68.32 },
@@ -152,7 +151,6 @@ const ContractTitle = styled.div`
     font-weight: 500;
 `;
 
-// --- THIS IS THE MISSING PART ---
 const AIScoreWrapper = styled.div`
     display: flex;
     align-items: center;
@@ -179,16 +177,22 @@ const ScoreText = styled.span`
     min-width: 50px;
     color: #4f46e5;
 `;
-// --- END OF MISSING PART ---
-
 
 // --- CHILD COMPONENTS ---
 
-const Toolbar = () => (
+const Toolbar: React.FC<{
+    searchQuery: string;
+    onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ searchQuery, onSearchChange }) => (
     <ToolbarWrapper>
         <SearchInputWrapper>
             <Search size={18} />
-            <input type="text" placeholder="Search contracts..." />
+            <input
+                type="text"
+                placeholder="Search contracts..."
+                value={searchQuery}
+                onChange={onSearchChange}
+            />
         </SearchInputWrapper>
         <div>
             <FilterButton>
@@ -209,11 +213,11 @@ const AIScore: React.FC<{ score: number }> = ({ score }) => (
 
 const getInitials = (name: string) => {
     const parts = name.split(' ');
-    if (parts.length > 1) {
+    if (parts.length > 1 && parts[0] && parts[1]) {
         return `${parts[0][0]}${parts[1][0]}`;
     }
     return name.substring(0, 2);
-}
+};
 
 const ContractRow: React.FC<{ contract: ResponseItem; value: string; aiScore: number }> = ({ contract, value, aiScore }) => (
     <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
@@ -269,15 +273,25 @@ const ContractsTable: React.FC<{ items: ResponseItem[] }> = ({ items }) => (
     </TableWrapper>
 );
 
+// --- MAIN COMPONENT ---
 interface ContractManagerProps {
     items: ResponseItem[];
 }
 
 const ContractManager: React.FC<ContractManagerProps> = ({ items }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredItems = items.filter(item =>
+        item.TITLE.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <ManagerWrapper>
-            <Toolbar />
-            <ContractsTable items={items} />
+            <Toolbar
+                searchQuery={searchQuery}
+                onSearchChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <ContractsTable items={filteredItems} />
         </ManagerWrapper>
     )
 }
