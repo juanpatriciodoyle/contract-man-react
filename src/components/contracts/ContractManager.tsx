@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {Edit, Eye, Trash2} from 'lucide-react';
 import {ResponseItem} from '../../hooks/useGetContracts';
 import {useNavigate} from 'react-router-dom';
-import {formatValue} from '../utils';
+import {formatValue, parseValue} from '../utils';
 
 import Table, {TableColumn} from '../ui/table/table';
 
@@ -73,6 +73,8 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
                     <div style={{fontSize: '0.8rem', color: '#6b7280'}}>{item.ID}</div>
                 </>
             ),
+            sortable: true,
+            sortValue: (item) => item.TITLE,
         },
         {
             key: 'vendor',
@@ -83,6 +85,8 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
                     {item.CDRL_RESPONSIBILITY}
                 </VendorCell>
             ),
+            sortable: true,
+            sortValue: (item) => item.CDRL_RESPONSIBILITY,
         },
         {
             key: 'status',
@@ -92,21 +96,29 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
                     {item['$3'] || 'Unknown'}
                 </Chip>
             ),
+            sortable: true,
+            sortValue: (item) => item['$3'],
         },
         {
             key: 'value',
             label: 'Value',
             renderCell: (item) => <strong>{formatValue(item.value)}</strong>,
+            sortable: true,
+            sortValue: (item) => item.value,
         },
         {
             key: 'aiScore',
             label: 'AI Score',
             renderCell: (item) => <AIScore score={item.aiScore}/>,
+            sortable: false,
+            sortValue: (item) => item.aiScore,
         },
         {
             key: 'submitDate',
             label: 'Submit Date',
             renderCell: (item) => <>{item.CDRL_SUBMIT_DATE}</>,
+            sortable: true,
+            sortValue: (item) => item.CDRL_SUBMIT_DATE ? new Date(item.CDRL_SUBMIT_DATE).getTime() : 0,
         },
         {
             key: 'actions',
@@ -142,6 +154,8 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
                 showSearch: true,
                 showFilter: true,
             }}
+            initialSortBy="submitDate"
+            initialSortDirection="desc"
         />
     );
 };
