@@ -1,26 +1,11 @@
-import React, { useState, useEffect, useRef, JSX } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, Edit, Trash2, Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
-import { ResponseItem } from '../../hooks/useGetContracts';
-import { StatusBadge } from './StatusBadge';
-import { useNavigate } from 'react-router-dom';
-import { formatValue } from '../utils';
-
-// --- MOCK DATA ---
-const MOCK_CONTRACT_EXTRAS = [
-    { value: 2400000, aiScore: 78.31 },
-    { value: 3200000, aiScore: 68.32 },
-    { value: 750000, aiScore: 74.54 },
-    { value: 950000, aiScore: 67.84 },
-    { value: 1800000, aiScore: 96.06 },
-    { value: null, aiScore: 55.00 },
-    { value: null, aiScore: 65.00 },
-    { value: null, aiScore: 75.00 },
-    { value: null, aiScore: 85.00 },
-];
-
-// --- STYLED COMPONENTS ---
+import {AnimatePresence, motion} from 'framer-motion';
+import {ChevronDown, Edit, Eye, Search, SlidersHorizontal, Trash2} from 'lucide-react';
+import {ResponseItem} from '../../hooks/useGetContracts';
+import {StatusBadge} from './StatusBadge';
+import {useNavigate} from 'react-router-dom';
+import {formatValue} from '../utils';
 
 const ManagerWrapper = styled.div`
     background-color: #ffffff;
@@ -46,6 +31,7 @@ const SearchInputWrapper = styled.div`
         padding: 0.5rem 0.75rem 0.5rem 2.5rem;
         border-radius: 0.5rem;
         border: 1px solid #d1d5db;
+
         &:focus {
             outline: 2px solid #3b82f6;
             border-color: transparent;
@@ -95,11 +81,11 @@ const DropdownItem = styled.button<{ selected: boolean }>`
     width: 100%;
     padding: 0.5rem 0.75rem;
     border: none;
-    background-color: ${({ selected }) => (selected ? '#f3f4f6' : 'transparent')};
+    background-color: ${({selected}) => (selected ? '#f3f4f6' : 'transparent')};
     border-radius: 0.25rem;
     text-align: left;
     cursor: pointer;
-    font-weight: ${({ selected }) => (selected ? '500' : '400')};
+    font-weight: ${({selected}) => (selected ? '500' : '400')};
 
     &:hover {
         background-color: #f3f4f6;
@@ -223,7 +209,7 @@ const Toolbar: React.FC<{
     onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     selectedStatus: string;
     onStatusChange: (status: string) => void;
-}> = ({ searchQuery, onSearchChange, selectedStatus, onStatusChange }) => {
+}> = ({searchQuery, onSearchChange, selectedStatus, onStatusChange}) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -240,7 +226,7 @@ const Toolbar: React.FC<{
     return (
         <ToolbarWrapper>
             <SearchInputWrapper>
-                <Search size={18} />
+                <Search size={18}/>
                 <input
                     type="text"
                     placeholder="Search contracts..."
@@ -251,16 +237,16 @@ const Toolbar: React.FC<{
 
             <FilterWrapper ref={dropdownRef}>
                 <FilterButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                    <SlidersHorizontal size={16} /> {selectedStatus} <ChevronDown size={16} />
+                    <SlidersHorizontal size={16}/> {selectedStatus} <ChevronDown size={16}/>
                 </FilterButton>
 
                 <AnimatePresence>
                     {isDropdownOpen && (
                         <DropdownMenu
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
+                            initial={{opacity: 0, y: -10}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: -10}}
+                            transition={{duration: 0.2}}
                         >
                             {STATUS_OPTIONS.map(status => (
                                 <DropdownItem
@@ -282,10 +268,10 @@ const Toolbar: React.FC<{
     );
 };
 
-const AIScore: React.FC<{ score: number }> = ({ score }) => (
+const AIScore: React.FC<{ score: number }> = ({score}) => (
     <AIScoreWrapper>
         <ScoreBar>
-            <ScoreFill score={score} />
+            <ScoreFill score={score}/>
         </ScoreBar>
         <ScoreText>{score.toFixed(2)}%</ScoreText>
     </AIScoreWrapper>
@@ -305,18 +291,18 @@ interface ContractRowProps {
     aiScore: number;
 }
 
-const ContractRow: React.FC<ContractRowProps> = ({ contract, value, aiScore }) => {
+const ContractRow: React.FC<ContractRowProps> = ({contract, value, aiScore}) => {
     const navigate = useNavigate();
 
     const handleViewClick = () => {
-        navigate(`/contract/${contract.ID}`, { state: { contract } });
+        navigate(`/contract/${contract.ID}`, {state: {contract}});
     };
 
     return (
-        <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <motion.tr initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.5}}>
             <Td>
                 <ContractTitle>{contract.TITLE}</ContractTitle>
-                <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{contract.ID}</div>
+                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>{contract.ID}</div>
             </Td>
             <Td>
                 <VendorCell>
@@ -324,15 +310,15 @@ const ContractRow: React.FC<ContractRowProps> = ({ contract, value, aiScore }) =
                     {contract.CDRL_RESPONSIBILITY}
                 </VendorCell>
             </Td>
-            <Td><StatusBadge status={contract['$3']} /></Td>
+            <Td><StatusBadge status={contract['$3']}/></Td>
             <Td><strong>{formatValue(value)}</strong></Td>
-            <Td><AIScore score={aiScore} /></Td>
+            <Td><AIScore score={aiScore}/></Td>
             <Td>{contract.CDRL_SUBMIT_DATE}</Td>
             <Td>
                 <ActionIcons>
-                    <ActionButton onClick={handleViewClick}><Eye size={16} /></ActionButton>
-                    <ActionButton><Edit size={16} /></ActionButton>
-                    <ActionButton><Trash2 size={16} /></ActionButton>
+                    <ActionButton onClick={handleViewClick}><Eye size={16}/></ActionButton>
+                    <ActionButton><Edit size={16}/></ActionButton>
+                    <ActionButton><Trash2 size={16}/></ActionButton>
                 </ActionIcons>
             </Td>
         </motion.tr>
@@ -344,7 +330,7 @@ interface ContractsTableProps {
     mockData: { value: number | null; aiScore: number }[];
 }
 
-const ContractsTable: React.FC<ContractsTableProps> = ({ items, mockData }) => (
+const ContractsTable: React.FC<ContractsTableProps> = ({items, mockData}) => (
     <TableWrapper>
         <Table>
             <thead>
@@ -378,7 +364,7 @@ interface ContractManagerProps {
     mockData: { value: number | null; aiScore: number }[];
 }
 
-const ContractManager: React.FC<ContractManagerProps> = ({ items, mockData }) => {
+const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('All Status');
 
@@ -396,7 +382,7 @@ const ContractManager: React.FC<ContractManagerProps> = ({ items, mockData }) =>
                 selectedStatus={selectedStatus}
                 onStatusChange={setSelectedStatus}
             />
-            <ContractsTable items={filteredItems} mockData={mockData} />
+            <ContractsTable items={filteredItems} mockData={mockData}/>
         </ManagerWrapper>
     );
 };
