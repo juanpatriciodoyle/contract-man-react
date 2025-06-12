@@ -20,7 +20,6 @@ interface DashboardProps {
 
 const DashboardGrid = styled(motion.div)`
     width: 100%;
-    max-width: 80rem;
     margin: 0 auto;
     padding: 0;
 
