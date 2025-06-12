@@ -6,7 +6,7 @@ export interface ChartDataItem {
     count: number;
     percentage: number;
     color: string;
-    icon?: React.ReactNode;
+    icon?: React.ElementType;
     value?: string;
 }
 
@@ -21,13 +21,13 @@ interface StatusProgressBarChartProps {
 
 const CardWrapper = styled.div`
     background-color: #ffffff;
+    height: fit-content;
     border-radius: 0.75rem;
     padding: 1.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
 `;
 
 const CardTitle = styled.h3`
-    font-size: 1rem;
     font-weight: 600;
     color: #111827;
     margin: 0 0 1.5rem 0;
@@ -137,7 +137,7 @@ const StatusProgressBarChart: React.FC<StatusProgressBarChartProps> = ({
                         <div key={item.label} style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
                             {showLeftIcon && item.icon && (
                                 <LeftIconWrapper>
-                                    {item.icon}
+                                    <item.icon size={20} />
                                 </LeftIconWrapper>
                             )}
                             <LegendItem color={item.color} fontScale={fontScale}>

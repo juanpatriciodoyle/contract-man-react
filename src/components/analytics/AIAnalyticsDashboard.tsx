@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {Activity, AlertTriangle, Brain, CheckCircle, Clock, FileText, LineChart, Target, Zap} from 'lucide-react';
+import {Activity, AlertTriangle, Brain, CheckCircle, Clock, FileText, Target, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {Subtitle, Title} from '../ui/text';
 import {Chip} from '../ui/chip';
+import StatusProgressBarChart from '../ui/statusProgressBarChart';
+
 
 const PageWrapper = styled.div`
     flex-grow: 1;
@@ -42,7 +44,6 @@ const CardWrapper = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-    font-size: 1.125rem;
     font-weight: 600;
     color: #111827;
     margin: 0 0 1.5rem 0;
@@ -51,40 +52,6 @@ const SectionTitle = styled.h3`
     gap: 0.5rem;
 `;
 
-const RiskItem = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-`;
-
-const RiskLabel = styled.span`
-    flex-basis: 120px;
-    color: #374151;
-    font-weight: 500;
-`;
-
-const ProgressBarContainer = styled.div`
-    flex-grow: 1;
-    height: 10px;
-    background-color: #e5e7eb;
-    border-radius: 5px;
-    overflow: hidden;
-`;
-
-const ProgressBarFill = styled.div<{ $percentage: number; $color: string }>`
-    width: ${({$percentage}) => $percentage}%;
-    height: 100%;
-    background-color: ${({$color}) => $color};
-    border-radius: 5px;
-`;
-
-const RiskCount = styled.span`
-    margin-left: 1rem;
-    font-weight: 500;
-    color: #4b5563;
-    min-width: 50px;
-    text-align: right;
-`;
 
 const RecentAnalysesList = styled.ul`
     list-style: none;
@@ -244,33 +211,33 @@ const AI_PERFORMANCE_TRENDS_DATA = [
     },
 ];
 
+const CONTAINER_VARIANTS = {
+    hidden: {opacity: 0},
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+        },
+    },
+};
+
+const ITEM_VARIANTS = {
+    hidden: {y: 20, opacity: 0},
+    visible: {
+        y: 0,
+        opacity: 1,
+    },
+};
+
 const AIAnalyticsDashboard: React.FC = () => {
-    const containerVariants = {
-        hidden: {opacity: 0},
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.15,
-            },
-        },
-    };
-
-    const itemVariants = {
-        hidden: {y: 20, opacity: 0},
-        visible: {
-            y: 0,
-            opacity: 1,
-        },
-    };
-
     return (
         <PageWrapper>
             <Title>AI Analytics Dashboard</Title>
             <Subtitle>Advanced insights and automated contract analysis</Subtitle>
 
-            <AnalyticsGrid variants={containerVariants} initial="hidden" animate="visible">
+            <AnalyticsGrid variants={CONTAINER_VARIANTS} initial="hidden" animate="visible">
                 {KPI_ANALYTICS_DATA.map((card) => (
-                    <motion.div key={card.title} variants={itemVariants}>
+                    <motion.div key={card.title} variants={ITEM_VARIANTS}>
                         <KPICard
                             title={card.title}
                             value={card.value}
@@ -287,9 +254,9 @@ const AIAnalyticsDashboard: React.FC = () => {
                 <Zap size={20}/>
                 AI Performance Trends
             </SectionTitle>
-            <AnalyticsGrid variants={containerVariants} initial="hidden" animate="visible">
+            <AnalyticsGrid variants={CONTAINER_VARIANTS} initial="hidden" animate="visible">
                 {AI_PERFORMANCE_TRENDS_DATA.map((card) => (
-                    <motion.div key={card.title} variants={itemVariants}>
+                    <motion.div key={card.title} variants={ITEM_VARIANTS}>
                         <KPICard
                             title={card.title}
                             value={card.value}
@@ -303,22 +270,14 @@ const AIAnalyticsDashboard: React.FC = () => {
             </AnalyticsGrid>
 
             <SecondSection>
-                <CardWrapper>
-                    <SectionTitle>
-                        <LineChart size={20}/>
-                        Risk Distribution
-                    </SectionTitle>
-                    {RISK_DISTRIBUTION_DATA.map((item) => (
-                        <RiskItem key={item.label}>
-                            <RiskLabel>{item.label}</RiskLabel>
-                            <ProgressBarContainer>
-                                <ProgressBarFill $percentage={item.percentage} $color={item.color}/>
-                            </ProgressBarContainer>
-                            <RiskCount>{item.count} contracts</RiskCount>
-                            <RiskCount>({item.percentage}%)</RiskCount>
-                        </RiskItem>
-                    ))}
-                </CardWrapper>
+                <StatusProgressBarChart
+                    title="Risk Distribution"
+                    data={RISK_DISTRIBUTION_DATA}
+                    showItemCountAndPercentage={true}
+                    showItemValue={false}
+                    showLeftIcon={false}
+                    fontScale={1}
+                />
 
                 <CardWrapper>
                     <SectionTitle>
