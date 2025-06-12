@@ -17,12 +17,11 @@ interface DashboardProps {
 
 const DashboardGrid = styled(motion.div)`
     width: 100%;
-    max-width: 80rem;
     margin: 0 auto;
     padding: 0;
 
     display: grid;
-    gap: 2.5rem; /* Increased gap from 1.5rem to 2.5rem */
+    gap: 2.5rem;
 
     grid-template-columns: repeat(1, 1fr);
 
@@ -61,7 +60,7 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
             change: "-12% from last month",
             $trend: "down",
             icon: Clock,
-            $color: "blue", // Use $color
+            $color: "blue",
         },
         {
             title: "APPROVAL RATE",
@@ -69,7 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
             change: "+5% from last month",
             $trend: "up",
             icon: Check,
-            $color: "green", // Use $color
+            $color: "green",
         },
         {
             title: "EXPIRING (30 DAYS)",
@@ -77,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
             change: "Needs attention",
             $trend: "warning",
             icon: Calendar,
-            $color: "yellow", // Use $color
+            $color: "yellow",
         },
         {
             title: "TOTAL CONTRACT VALUE",
@@ -85,7 +84,7 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
             change: "+18% from last quarter",
             $trend: "up",
             icon: DollarSign,
-            $color: "purple", // Use $color
+            $color: "purple",
         },
     ];
 
