@@ -1,6 +1,9 @@
+// src/components/ui/table/TableElements.tsx (Updated)
+
 import React from 'react';
 import styled from 'styled-components';
-import {motion} from 'framer-motion';
+import { motion } from 'framer-motion';
+import { formatValue } from '../../utils'; // Adjust path if utils.ts is elsewhere
 
 export const ActionButton = styled.button`
     display: flex;
@@ -65,8 +68,9 @@ export const ScoreBar = styled.div`
     overflow: hidden;
 `;
 
-export const ScoreFill = styled.div<{ score: number }>`
-    width: ${(props) => props.score}%;
+// Update ScoreFill to accept '$score'
+export const ScoreFill = styled.div<{ $score: number }>`
+    width: ${({ $score }) => $score}%; // Use $score
     height: 100%;
     background-color: #4f46e5;
     border-radius: 4px;
@@ -78,10 +82,11 @@ export const ScoreText = styled.span`
     color: #4f46e5;
 `;
 
+// Update AIScore to pass '$score'
 export const AIScore: React.FC<{ score: number }> = ({score}) => (
     <AIScoreWrapper>
         <ScoreBar>
-            <ScoreFill score={score}/>
+            <ScoreFill $score={score}/> {/* Pass $score */}
         </ScoreBar>
         <ScoreText>{score.toFixed(2)}%</ScoreText>
     </AIScoreWrapper>

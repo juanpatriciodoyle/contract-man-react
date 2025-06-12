@@ -1,3 +1,5 @@
+// src/components/dashboard/KPICard.tsx (Updated)
+
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Card, CardContent } from '../ui/card';
 import { TrendingUp, TrendingDown, AlertTriangle, LucideIcon } from 'lucide-react';
@@ -9,9 +11,9 @@ interface KPICardProps {
   title: string;
   value: string;
   change: string;
-  trend: 'up' | 'down' | 'warning';
+  $trend: 'up' | 'down' | 'warning';
   icon: LucideIcon;
-  color: 'blue' | 'green' | 'yellow' | 'purple';
+  $color: 'blue' | 'green' | 'yellow' | 'purple'; // Change 'color' to '$color'
 }
 
 const colorStyles = {
@@ -33,15 +35,16 @@ const trendIconMap = {
   warning: <AlertTriangle size={16} />,
 };
 
-const IconWrapper = styled(motion.div)<{ color: KPICardProps['color'] }>`
+// Update IconWrapper to accept '$color'
+const IconWrapper = styled(motion.div)<{ $color: KPICardProps['$color'] }>`
   width: 3rem;
   height: 3rem;
   border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => colorStyles[props.color].bg};
-  color: ${(props) => colorStyles[props.color].text};
+  background-color: ${(props) => colorStyles[props.$color].bg}; // Use $color here
+  color: ${(props) => colorStyles[props.$color].text}; // Use $color here
 `;
 
 const Title = styled.p`
@@ -59,12 +62,12 @@ const Value = styled(motion.p)`
   margin-top: 0.5rem;
 `;
 
-const Change = styled.div<{ trend: KPICardProps['trend'] }>`
+const Change = styled.div<{ $trend: KPICardProps['$trend'] }>`
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: ${(props) => trendColorStyles[props.trend]};
+  color: ${(props) => trendColorStyles[props.$trend]};
 
   span {
     margin-left: 0.25rem;
@@ -77,7 +80,8 @@ const CardBody = styled.div`
   justify-content: space-between;
 `;
 
-export default function KPICard({ title, value, change, trend, icon: Icon, color }: KPICardProps) {
+// Update function signature to use '$trend' and '$color'
+export default function KPICard({ title, value, change, $trend, icon: Icon, $color }: KPICardProps) {
   const isCurrency = value.includes('$');
   const targetValue = useMemo(() => isCurrency ? parseValue(value) : 0, [value, isCurrency]);
   const count = useMotionValue(0);
@@ -102,13 +106,13 @@ export default function KPICard({ title, value, change, trend, icon: Icon, color
               <Value>
                 {isCurrency ? displayValue : value}
               </Value>
-              <Change trend={trend}>
-                {trendIconMap[trend]}
+              <Change $trend={$trend}>
+                {trendIconMap[$trend]}
                 <span>{change}</span>
               </Change>
             </div>
             <IconWrapper
-                color={color}
+                $color={$color} // Pass $color here
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 400 }}
             >

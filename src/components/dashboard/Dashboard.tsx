@@ -17,11 +17,12 @@ interface DashboardProps {
 
 const DashboardGrid = styled(motion.div)`
     width: 100%;
+    max-width: 80rem;
     margin: 0 auto;
     padding: 0;
 
     display: grid;
-    gap: 1.5rem;
+    gap: 2.5rem; /* Increased gap from 1.5rem to 2.5rem */
 
     grid-template-columns: repeat(1, 1fr);
 
@@ -58,33 +59,33 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
             title: "AVG. PROCESSING TIME",
             value: "4.2 days",
             change: "-12% from last month",
-            trend: "down",
+            $trend: "down",
             icon: Clock,
-            color: "blue",
+            $color: "blue", // Use $color
         },
         {
             title: "APPROVAL RATE",
             value: metrics.approvalRate,
             change: "+5% from last month",
-            trend: "up",
+            $trend: "up",
             icon: Check,
-            color: "green",
+            $color: "green", // Use $color
         },
         {
             title: "EXPIRING (30 DAYS)",
             value: String(metrics.expiringCount),
             change: "Needs attention",
-            trend: "warning",
+            $trend: "warning",
             icon: Calendar,
-            color: "yellow",
+            $color: "yellow", // Use $color
         },
         {
             title: "TOTAL CONTRACT VALUE",
             value: metrics.totalValue,
             change: "+18% from last quarter",
-            trend: "up",
+            $trend: "up",
             icon: DollarSign,
-            color: "purple",
+            $color: "purple", // Use $color
         },
     ];
 
@@ -100,9 +101,9 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
                         title={card.title}
                         value={card.value}
                         change={card.change}
-                        trend={card.trend as 'up' | 'down' | 'warning'}
+                        $trend={card.$trend as 'up' | 'down' | 'warning'}
                         icon={card.icon}
-                        color={card.color as 'blue' | 'green' | 'yellow' | 'purple'}
+                        $color={card.$color as 'blue' | 'green' | 'yellow' | 'purple'} // Pass $color
                     />
                 </motion.div>
             ))}

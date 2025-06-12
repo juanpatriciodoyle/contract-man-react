@@ -86,33 +86,33 @@ const VendorPortalPage: React.FC = () => {
             title: "TOTAL VENDORS",
             value: vendorMetrics.totalVendors,
             change: "",
-            trend: "up",
+            $trend: "up",
             icon: Users,
-            color: "blue",
+            $color: "blue", // Use $color
         },
         {
             title: "VERIFIED",
             value: vendorMetrics.verified,
             change: "",
-            trend: "up",
+            $trend: "up",
             icon: CheckCircle,
-            color: "green",
+            $color: "green", // Use $color
         },
         {
             title: "PENDING",
             value: vendorMetrics.pending,
             change: "",
-            trend: "warning",
+            $trend: "warning",
             icon: Clock,
-            color: "yellow",
+            $color: "yellow", // Use $color
         },
         {
             title: "REJECTED",
             value: vendorMetrics.rejected,
             change: "",
-            trend: "down",
+            $trend: "down",
             icon: AlertTriangle,
-            color: "purple",
+            $color: "purple", // Use $color
         },
     ];
 
@@ -134,14 +134,7 @@ const VendorPortalPage: React.FC = () => {
         }
     };
 
-    // Mock data for the Vendor Management table
-    const vendorTableData: VendorItem[] = [
-        // Add some mock data to see the table in action, e.g.:
-        // { id: 'v1', company: 'Tech Solutions Inc.', contact: 'Alice Wonderland', industry: 'Technology', status: 'verified', registeredDate: '2023-01-15' },
-        // { id: 'v2', company: 'Health Innovations', contact: 'Bob The Builder', industry: 'Healthcare', status: 'pending', registeredDate: '2023-02-20' },
-        // { id: 'v3', company: 'Finance Pros', contact: 'Charlie Chaplin', industry: 'Finance', status: 'rejected', registeredDate: '2023-03-01' },
-    ];
-
+    const vendorTableData: VendorItem[] = [];
 
     const vendorColumns: TableColumn<VendorItem>[] = [
         {key: 'company', label: 'Company', renderCell: (item) => <>{item.company}</>},
@@ -163,7 +156,7 @@ const VendorPortalPage: React.FC = () => {
         {
             key: 'actions',
             label: 'Actions',
-            renderCell: () => (
+            renderCell: (item) => (
                 <ActionIcons>
                     <ActionButton><Users size={16}/></ActionButton>
                 </ActionIcons>
@@ -210,9 +203,9 @@ const VendorPortalPage: React.FC = () => {
                             title={card.title}
                             value={card.value}
                             change={card.change}
-                            trend={card.trend as 'up' | 'down' | 'warning'}
+                            $trend={card.$trend as 'up' | 'down' | 'warning'}
                             icon={card.icon}
-                            color={card.color as 'blue' | 'green' | 'yellow' | 'purple'}
+                            $color={card.$color as 'blue' | 'green' | 'yellow' | 'purple'} // Pass $color
                         />
                     </CardRowItem>
                 ))}

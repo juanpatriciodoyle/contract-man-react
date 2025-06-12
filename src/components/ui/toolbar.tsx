@@ -126,6 +126,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                     <Search size={18}/>
                     <input
                         type="text"
+                        id="search-input"
+                        name="search"
                         placeholder={placeholder}
                         value={searchQuery}
                         onChange={onSearchChange}

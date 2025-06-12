@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toolbar, ToolbarProps } from '../toolbar';
-import { TableRowAnimated } from './tableElements';
+import { TableRowAnimated} from './tableElements';
 
 const ManagerWrapper = styled.div`
     background-color: #ffffff;
@@ -75,7 +75,7 @@ function Table<T>({ columns, data, emptyMessage = "No items to display.", showTo
                     </thead>
                     <tbody>
                     {data.length > 0 ? (
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence mode="sync">
                             {data.map((item, index) => (
                                 <TableRowAnimated
                                     key={item[columns[0].key as keyof T] as React.Key || index}
@@ -84,7 +84,7 @@ function Table<T>({ columns, data, emptyMessage = "No items to display.", showTo
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    {columns.map((column) => (
+                                    {columns.map((column, colIndex) => (
                                         <Td key={`${column.key}-${index}`}>
                                             {column.renderCell(item, index)}
                                         </Td>
