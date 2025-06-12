@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {Edit, Eye, Trash2} from 'lucide-react';
 import {ResponseItem} from '../../hooks/useGetContracts';
 import {useNavigate} from 'react-router-dom';
-import {formatValue, parseValue} from '../utils';
+import {formatValue} from '../utils';
 
 import Table, {TableColumn} from '../ui/table/table';
 
