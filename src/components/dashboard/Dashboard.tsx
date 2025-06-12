@@ -2,14 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import KPICard from './KPICard';
-import { DollarSign, Check, Calendar, Package } from 'lucide-react';
+import { DollarSign, Check, Calendar, Clock, Package } from 'lucide-react';
 
 // Interface for the props our Dashboard will receive
 interface KpiMetrics {
     totalValue: string;
-    approvalRate: string;
-    expiringCount: number;
     activeContracts: number;
+    expiringCount: number;
+    approvalRate: string;
 }
 
 interface DashboardProps {
@@ -59,20 +59,12 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics }) => {
     // The KPI_DATA array is now built dynamically from the props
     const KPI_DATA = [
         {
-            title: "TOTAL CONTRACT VALUE",
-            value: metrics.totalValue,
-            change: "+18% from last quarter",
-            trend: "up",
-            icon: DollarSign,
-            color: "purple",
-        },
-        {
-            title: "ACTIVE CONTRACTS",
-            value: `${metrics.activeContracts}`,
-            change: "All contracts",
-            trend: "up",
-            icon: Package,
-            color: "green",
+            title: "AVG. PROCESSING TIME",
+            value: "4.2 days",
+            change: "-12% from last month",
+            trend: "down",
+            icon: Clock,
+            color: "blue",
         },
         {
             title: "APPROVAL RATE",
@@ -89,6 +81,14 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics }) => {
             trend: "warning",
             icon: Calendar,
             color: "yellow",
+        },
+        {
+            title: "TOTAL CONTRACT VALUE",
+            value: metrics.totalValue,
+            change: "+18% from last quarter",
+            trend: "up",
+            icon: DollarSign,
+            color: "purple",
         },
     ];
 
