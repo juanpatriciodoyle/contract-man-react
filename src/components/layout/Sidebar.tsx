@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import {LayoutDashboard, FileText, Bot, Users} from 'lucide-react';
+import {LayoutDashboard, FileText, Bot, Users, BarChart2} from 'lucide-react';
 
 const SidebarWrapper = styled.div`
     width: 280px;
@@ -45,20 +45,19 @@ const NavList = styled.nav`
     gap: 0.5rem;
 `;
 
-// --- UPDATED STYLES HERE ---
 const StyledNavLink = styled(NavLink)`
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
-    color: #374151; /* Default text color for inactive link */
+    color: #374151;
     text-decoration: none;
     font-weight: 500;
     transition: background-color 0.2s, color 0.2s;
 
     svg {
-        color: #6b7280; /* Default icon color */
+        color: #6b7280;
         transition: color 0.2s;
     }
 
@@ -94,18 +93,17 @@ const LinkContent = styled.span`
 
 const NotificationBadge = styled.span`
     background-color: #ef4444;
-    color: #ffffff; 
+    color: #ffffff;
     font-size: 0.75rem;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 9999px;
 `;
 
-
 const SeparatorLine = styled.div`
-  border-bottom: 1px solid #e5e7eb; 
-  margin: 1.5rem 0;
-  width: 100%; 
+    border-bottom: 1px solid #e5e7eb;
+    margin: 1.5rem 0;
+    width: 100%;
 `;
 
 interface SidebarProps {
@@ -133,6 +131,12 @@ const Sidebar: React.FC<SidebarProps> = ({ contractCount }) => {
                         Contracts
                     </LinkContent>
                     {contractCount > 0 && <NotificationBadge>{contractCount}</NotificationBadge>}
+                </StyledNavLink>
+                <StyledNavLink to="/ai-analytics">
+                    <LinkContent>
+                        <BarChart2 size={20} />
+                        AI Analytics
+                    </LinkContent>
                 </StyledNavLink>
                 <StyledNavLink to="/admin-vendors">
                     <LinkContent>

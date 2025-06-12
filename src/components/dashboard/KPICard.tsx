@@ -80,7 +80,6 @@ const CardBody = styled.div`
   justify-content: space-between;
 `;
 
-// Update function signature to use '$trend' and '$color'
 export default function KPICard({ title, value, change, $trend, icon: Icon, $color }: KPICardProps) {
   const isCurrency = value.includes('$');
   const targetValue = useMemo(() => isCurrency ? parseValue(value) : 0, [value, isCurrency]);
@@ -112,7 +111,7 @@ export default function KPICard({ title, value, change, $trend, icon: Icon, $col
               </Change>
             </div>
             <IconWrapper
-                $color={$color} // Pass $color here
+                $color={$color}
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 400 }}
             >

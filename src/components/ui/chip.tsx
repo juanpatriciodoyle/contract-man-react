@@ -1,5 +1,3 @@
-// src/components/ui/chip/index.tsx (Updated)
-
 import React, { JSX } from 'react';
 import styled from 'styled-components';
 import { Circle, CircleCheck, AlertCircle, Search, Clock } from 'lucide-react';
@@ -7,6 +5,7 @@ import { Circle, CircleCheck, AlertCircle, Search, Clock } from 'lucide-react';
 interface ChipProps {
     type: 'approved' | 'pending-review' | 'need-more-info' | 'rejected' | 'ai-review' | 'accepted' | 'unknown';
     children: React.ReactNode;
+    showIcon?: boolean;
 }
 
 const CHIP_STYLES: { [key: string]: { bg: string; text: string; icon: JSX.Element } } = {
@@ -21,7 +20,6 @@ const CHIP_STYLES: { [key: string]: { bg: string; text: string; icon: JSX.Elemen
 
 type ChipKey = keyof typeof CHIP_STYLES;
 
-// Update BadgeWrapper to accept '$chipType'
 const BadgeWrapper = styled.div<{ $chipType: ChipKey }>`
     display: inline-flex;
     align-items: center;
@@ -31,20 +29,20 @@ const BadgeWrapper = styled.div<{ $chipType: ChipKey }>`
     font-size: 0.8rem;
     font-weight: 500;
 
-    background-color: ${({ $chipType }) => CHIP_STYLES[$chipType].bg}; // Use $chipType
-    color: ${({ $chipType }) => CHIP_STYLES[$chipType].text}; // Use $chipType
+    background-color: ${({ $chipType }) => CHIP_STYLES[$chipType].bg};
+    color: ${({ $chipType }) => CHIP_STYLES[$chipType].text};
 
     svg {
-        color: ${({ $chipType }) => CHIP_STYLES[$chipType].text}; // Use $chipType
+        color: ${({ $chipType }) => CHIP_STYLES[$chipType].text};
     }
 `;
 
-export const Chip: React.FC<ChipProps> = ({ type, children }) => {
+export const Chip: React.FC<ChipProps> = ({ type, children, showIcon = true }) => {
     const chipType = (type && CHIP_STYLES[type] ? type : 'unknown') as ChipKey;
 
     return (
-        <BadgeWrapper $chipType={chipType}> {/* Pass $chipType */}
-            {CHIP_STYLES[chipType].icon}
+        <BadgeWrapper $chipType={chipType}>
+            {showIcon && CHIP_STYLES[chipType].icon}
             <span>{children}</span>
         </BadgeWrapper>
     );

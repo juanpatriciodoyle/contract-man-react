@@ -4,7 +4,6 @@ export const Card = styled.div`
     background-color: #ffffff;
     color: #111827;
     border-radius: 0.75rem;
-    border: 1px solid #e5e7eb;
 
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 

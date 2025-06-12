@@ -5,10 +5,11 @@ import {GlobalStyle} from './styles/GlobalStyle';
 import Sidebar from './components/layout/Sidebar';
 import MainContent from './components/layout/MainContent';
 import ContractDetail from './components/contracts/ContractDetail';
-import ContractsPage from './components/contracts/ContractsPage'; // Corrected import path
+import ContractsPage from './components/contracts/ContractsPage';
 import {useGetTokens} from './hooks/useGetTokens';
 import {useGetContracts} from './hooks/useGetContracts';
 import VendorPortalPage from "./components/vendor-admin/VendorPortalPage";
+import AIAnalyticsDashboard from './components/analytics/AIAnalyticsDashboard';
 
 const AppWrapper = styled.div`
     display: flex;
@@ -51,6 +52,10 @@ const App = () => {
                     <Route
                         path="/admin-vendors"
                         element={<VendorPortalPage />}
+                    />
+                    <Route
+                        path="/ai-analytics"
+                        element={<AIAnalyticsDashboard />}
                     />
                 </Route>
                 <Route path="/contract/:contractId" element={<ContractDetail/>}/>
