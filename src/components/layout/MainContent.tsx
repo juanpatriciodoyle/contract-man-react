@@ -26,13 +26,6 @@ const PageSubtitle = styled.p`
   margin-bottom: 2.5rem;
 `;
 
-const Hr = styled.hr`
-  width: 100%;
-  margin: 2.5rem 0;
-  border: 0;
-  border-top: 1px solid #e5e7eb;
-`;
-
 const MainContent = () => {
     const tokenResult = useGetTokens();
     const claimsToken = tokenResult?.claims_token || '';
@@ -44,8 +37,6 @@ const MainContent = () => {
             <PageSubtitle>Comprehensive contract management and AI insights</PageSubtitle>
 
             <Dashboard />
-
-            <Hr />
 
             {isLoading && <p>Loading contracts...</p>}
             {error && <p style={{ color: 'red' }}>Error fetching contracts: {error}</p>}
