@@ -10,6 +10,7 @@ import {useGetTokens} from './hooks/useGetTokens';
 import {useGetContracts} from './hooks/useGetContracts';
 import VendorPortalPage from "./components/vendor-admin/VendorPortalPage";
 import AIAnalyticsDashboard from './components/analytics/AIAnalyticsDashboard';
+import ReportsPage from './components/reports/ReportsPage';
 
 const AppWrapper = styled.div`
     display: flex;
@@ -56,6 +57,10 @@ const App = () => {
                     <Route
                         path="/ai-analytics"
                         element={<AIAnalyticsDashboard />}
+                    />
+                    <Route
+                        path="/reports"
+                        element={<ReportsPage />}
                     />
                 </Route>
                 <Route path="/contract/:contractId" element={<ContractDetail/>}/>
