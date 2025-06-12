@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {motion} from 'framer-motion';
 
 export interface ChartDataItem {
     label: string;
@@ -25,6 +26,7 @@ const CardWrapper = styled.div`
     border-radius: 0.75rem;
     padding: 1.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+    height: 100%;
 `;
 
 const CardTitle = styled.h3`
@@ -39,13 +41,7 @@ const CardTitle = styled.h3`
 const ContentWrapper = styled.div`
     display: flex;
     gap: 2rem;
-`;
-
-const Legend = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    flex-shrink: 0;
+    flex-direction: column; /* Changed to column for better vertical flow */
 `;
 
 const LegendItem = styled.div<{ color: string; fontScale: number }>`
@@ -65,13 +61,6 @@ const LegendItem = styled.div<{ color: string; fontScale: number }>`
     }
 `;
 
-const Chart = styled.div`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-`;
-
 const BarWrapper = styled.div`
     display: flex;
     align-items: center;
@@ -86,8 +75,7 @@ const Bar = styled.div`
     overflow: hidden;
 `;
 
-const BarFill = styled.div<{ $percentage: number; $customColor: string }>`
-    width: ${({$percentage}) => $percentage}%;
+const BarFill = styled(motion.div)<{ $customColor: string }>` /* Changed to motion.div */
     height: 100%;
     background-color: ${({$customColor}) => $customColor};
     border-radius: 5px;
@@ -106,6 +94,8 @@ const ValueLabel = styled.p<{ fontScale: number }>`
     font-weight: 600;
     color: #1f2937;
     font-size: ${({fontScale}) => 1 * fontScale}rem;
+    min-width: 50px; /* Give it a min-width to help alignment */
+    text-align: right; /* Ensure text aligns to the right */
 `;
 
 const LeftIconWrapper = styled.div`
@@ -130,50 +120,43 @@ const StatusProgressBarChart: React.FC<StatusProgressBarChartProps> = ({
                                                                            fontScale = 1,
                                                                            titleIcon: TitleIcon,
                                                                        }) => {
-    const maxCount = Math.max(...data.map(item => item.count || 0), 1);
 
     return (
         <CardWrapper>
             <CardTitle>
-                {TitleIcon && <TitleIcon size={20} style={{marginRight: '0.5rem'}} />}
+                {TitleIcon && <TitleIcon size={20} style={{marginRight: '0.5rem'}}/>}
                 {title}
             </CardTitle>
             <ContentWrapper>
-                <Legend>
-                    {data.map(item => (
-                        <div key={item.label} style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
-                            {showLeftIcon && item.icon && (
-                                <LeftIconWrapper>
-                                    <item.icon size={20} />
-                                </LeftIconWrapper>
-                            )}
-                            <LegendItem color={item.color} fontScale={fontScale}>
-                                {item.label}
-                            </LegendItem>
-                        </div>
-                    ))}
-                </Legend>
-                <Chart>
-                    {data.map(item => (
-                        <BarWrapper key={item.label}>
-                            <Bar>
-                                <BarFill
-                                    $percentage={(item.count / maxCount) * 100}
-                                    $customColor={item.color}
-                                />
-                            </Bar>
-                            {showItemCountAndPercentage && (
-                                <>
-                                    <CountLabel fontScale={fontScale}>{item.count} contracts</CountLabel>
-                                    <CountLabel fontScale={fontScale}>({item.percentage}%)</CountLabel>
-                                </>
-                            )}
-                            {showItemValue && item.value && (
-                                <ValueLabel fontScale={fontScale}>{item.value}</ValueLabel>
-                            )}
-                        </BarWrapper>
-                    ))}
-                </Chart>
+                {data.map(item => (
+                    <BarWrapper key={item.label}>
+                        {showLeftIcon && item.icon && (
+                            <LeftIconWrapper>
+                                <item.icon size={20}/>
+                            </LeftIconWrapper>
+                        )}
+                        <LegendItem color={item.color} fontScale={fontScale}>
+                            {item.label}
+                        </LegendItem>
+                        <Bar>
+                            <BarFill
+                                $customColor={item.color}
+                                initial={{width: '0%'}}
+                                animate={{width: `${item.percentage}%`}}
+                                transition={{duration: 0.8, ease: 'easeOut'}}
+                            />
+                        </Bar>
+                        {showItemCountAndPercentage && (
+                            <>
+                                <CountLabel fontScale={fontScale}>{item.count} contracts</CountLabel>
+                                <CountLabel fontScale={fontScale}>({item.percentage}%)</CountLabel>
+                            </>
+                        )}
+                        {showItemValue && item.value && (
+                            <ValueLabel fontScale={fontScale}>{item.value}</ValueLabel>
+                        )}
+                    </BarWrapper>
+                ))}
             </ContentWrapper>
         </CardWrapper>
     );
