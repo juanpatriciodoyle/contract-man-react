@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
         sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        background-color: #282c34;
+        background-color: #000000;
         color: white;
     }
 
