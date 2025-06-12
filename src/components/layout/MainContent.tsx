@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useGetTokens } from '../../hooks/useGetTokens';
 import { useGetContracts } from '../../hooks/useGetContracts';
-import Dashboard from '../dashboard/Dashbord';
+import Dashboard from '../dashboard/Dashboard';
 import ContractList from '../contracts/ContractList';
 
 const ContentWrapper = styled.main`
