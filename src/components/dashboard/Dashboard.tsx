@@ -1,8 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import styled from 'styled-components';
 import KPICard from './KPICard';
-import { DollarSign, Check, Calendar, Clock, Package } from 'lucide-react';
+import {Calendar, Check, Clock, DollarSign} from 'lucide-react';
 
 // Interface for the props our Dashboard will receive
 interface KpiMetrics {
@@ -38,7 +38,7 @@ const DashboardGrid = styled(motion.div)`
 `;
 
 const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: {opacity: 0},
     visible: {
         opacity: 1,
         transition: {
@@ -48,14 +48,14 @@ const containerVariants = {
 };
 
 const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: {y: 20, opacity: 0},
     visible: {
         y: 0,
         opacity: 1,
     }
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ metrics }) => {
+const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
     // The KPI_DATA array is now built dynamically from the props
     const KPI_DATA = [
         {

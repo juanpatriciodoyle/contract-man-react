@@ -1,24 +1,23 @@
-// src/components/contracts/ContractManager.tsx
-
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useState, useEffect, useRef, JSX } from 'react';
 import styled from 'styled-components';
-import {AnimatePresence, motion} from 'framer-motion';
-import {ChevronDown, Edit, Eye, Search, SlidersHorizontal, Trash2} from 'lucide-react';
-import {ResponseItem} from '../../hooks/useGetContracts';
-import {StatusBadge} from './StatusBadge';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Eye, Edit, Trash2, Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { ResponseItem } from '../../hooks/useGetContracts';
+import { StatusBadge } from './StatusBadge';
+import { useNavigate } from 'react-router-dom';
+import { formatValue } from '../utils';
 
 // --- MOCK DATA ---
-// This data is used to fill the "Value" and "AI Score" columns for the demo.
 const MOCK_CONTRACT_EXTRAS = [
-    { value: '$2.4M', aiScore: 78.31 },
-    { value: '$3.2M', aiScore: 68.32 },
-    { value: '$750K', aiScore: 74.54 },
-    { value: '$950K', aiScore: 67.84 },
-    { value: '$1.8M', aiScore: 96.06 },
-    { value: 'Unknown', aiScore: 55.00 },
-    { value: 'Unknown', aiScore: 65.00 },
-    { value: 'Unknown', aiScore: 75.00 },
-    { value: 'Unknown', aiScore: 85.00 },
+    { value: 2400000, aiScore: 78.31 },
+    { value: 3200000, aiScore: 68.32 },
+    { value: 750000, aiScore: 74.54 },
+    { value: 950000, aiScore: 67.84 },
+    { value: 1800000, aiScore: 96.06 },
+    { value: null, aiScore: 55.00 },
+    { value: null, aiScore: 65.00 },
+    { value: null, aiScore: 75.00 },
+    { value: null, aiScore: 85.00 },
 ];
 
 // --- STYLED COMPONENTS ---
@@ -195,26 +194,25 @@ const AIScoreWrapper = styled.div`
 `;
 
 const ScoreBar = styled.div`
-  width: 80px;
-  height: 8px;
-  background-color: #e0e7ff;
-  border-radius: 4px;
-  overflow: hidden;
+    width: 80px;
+    height: 8px;
+    background-color: #e0e7ff;
+    border-radius: 4px;
+    overflow: hidden;
 `;
 
 const ScoreFill = styled.div<{ score: number }>`
-  width: ${(props) => props.score}%;
-  height: 100%;
-  background-color: #4f46e5;
-  border-radius: 4px;
+    width: ${(props) => props.score}%;
+    height: 100%;
+    background-color: #4f46e5;
+    border-radius: 4px;
 `;
 
 const ScoreText = styled.span`
-  font-weight: 500;
-  min-width: 50px;
-  color: #4f46e5;
+    font-weight: 500;
+    min-width: 50px;
+    color: #4f46e5;
 `;
-
 
 // --- CHILD COMPONENTS ---
 
@@ -301,33 +299,52 @@ const getInitials = (name: string) => {
     return name.substring(0, 2);
 };
 
-const ContractRow: React.FC<{ contract: ResponseItem; value: string; aiScore: number }> = ({ contract, value, aiScore }) => (
-    <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        <Td>
-            <ContractTitle>{contract.TITLE}</ContractTitle>
-            <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{contract.ID}</div>
-        </Td>
-        <Td>
-            <VendorCell>
-                <Avatar>{getInitials(contract.CDRL_RESPONSIBILITY)}</Avatar>
-                {contract.CDRL_RESPONSIBILITY}
-            </VendorCell>
-        </Td>
-        <Td><StatusBadge status={contract['$3']} /></Td>
-        <Td><strong>{value}</strong></Td>
-        <Td><AIScore score={aiScore} /></Td>
-        <Td>{contract.CDRL_SUBMIT_DATE}</Td>
-        <Td>
-            <ActionIcons>
-                <ActionButton><Eye size={16} /></ActionButton>
-                <ActionButton><Edit size={16} /></ActionButton>
-                <ActionButton><Trash2 size={16} /></ActionButton>
-            </ActionIcons>
-        </Td>
-    </motion.tr>
-);
+interface ContractRowProps {
+    contract: ResponseItem;
+    value: number | null;
+    aiScore: number;
+}
 
-const ContractsTable: React.FC<{ items: ResponseItem[] }> = ({ items }) => (
+const ContractRow: React.FC<ContractRowProps> = ({ contract, value, aiScore }) => {
+    const navigate = useNavigate();
+
+    const handleViewClick = () => {
+        navigate(`/contract/${contract.ID}`, { state: { contract } });
+    };
+
+    return (
+        <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+            <Td>
+                <ContractTitle>{contract.TITLE}</ContractTitle>
+                <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{contract.ID}</div>
+            </Td>
+            <Td>
+                <VendorCell>
+                    <Avatar>{getInitials(contract.CDRL_RESPONSIBILITY)}</Avatar>
+                    {contract.CDRL_RESPONSIBILITY}
+                </VendorCell>
+            </Td>
+            <Td><StatusBadge status={contract['$3']} /></Td>
+            <Td><strong>{formatValue(value)}</strong></Td>
+            <Td><AIScore score={aiScore} /></Td>
+            <Td>{contract.CDRL_SUBMIT_DATE}</Td>
+            <Td>
+                <ActionIcons>
+                    <ActionButton onClick={handleViewClick}><Eye size={16} /></ActionButton>
+                    <ActionButton><Edit size={16} /></ActionButton>
+                    <ActionButton><Trash2 size={16} /></ActionButton>
+                </ActionIcons>
+            </Td>
+        </motion.tr>
+    );
+};
+
+interface ContractsTableProps {
+    items: ResponseItem[];
+    mockData: { value: number | null; aiScore: number }[];
+}
+
+const ContractsTable: React.FC<ContractsTableProps> = ({ items, mockData }) => (
     <TableWrapper>
         <Table>
             <thead>
@@ -346,8 +363,8 @@ const ContractsTable: React.FC<{ items: ResponseItem[] }> = ({ items }) => (
                 <ContractRow
                     key={item['@unid']}
                     contract={item}
-                    value={MOCK_CONTRACT_EXTRAS[index]?.value || '$0'}
-                    aiScore={MOCK_CONTRACT_EXTRAS[index]?.aiScore || 0}
+                    value={mockData[index]?.value || null}
+                    aiScore={mockData[index]?.aiScore || 0}
                 />
             ))}
             </tbody>
@@ -358,9 +375,10 @@ const ContractsTable: React.FC<{ items: ResponseItem[] }> = ({ items }) => (
 // --- MAIN COMPONENT ---
 interface ContractManagerProps {
     items: ResponseItem[];
+    mockData: { value: number | null; aiScore: number }[];
 }
 
-const ContractManager: React.FC<ContractManagerProps> = ({ items }) => {
+const ContractManager: React.FC<ContractManagerProps> = ({ items, mockData }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('All Status');
 
@@ -378,9 +396,9 @@ const ContractManager: React.FC<ContractManagerProps> = ({ items }) => {
                 selectedStatus={selectedStatus}
                 onStatusChange={setSelectedStatus}
             />
-            <ContractsTable items={filteredItems} />
+            <ContractsTable items={filteredItems} mockData={mockData} />
         </ManagerWrapper>
-    )
-}
+    );
+};
 
 export default ContractManager;

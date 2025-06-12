@@ -4,12 +4,26 @@ import { useGetTokens } from '../../hooks/useGetTokens';
 import { useGetContracts } from '../../hooks/useGetContracts';
 import Dashboard from '../dashboard/Dashboard';
 import ContractManager from '../contracts/ContractManager';
+import { formatValue } from '../utils';
+
+// --- The Single Source of Truth for Mock Data ---
+const CONTRACT_MOCK_DATA = [
+    { value: 2400000, aiScore: 78.31 },
+    { value: 3200000, aiScore: 68.32 },
+    { value: 750000, aiScore: 74.54 },
+    { value: 950000, aiScore: 67.84 },
+    { value: 1800000, aiScore: 96.06 },
+    { value: null, aiScore: 55.00 },
+    { value: null, aiScore: 65.00 },
+    { value: null, aiScore: 75.00 },
+    { value: null, aiScore: 85.00 },
+];
 
 const ContentWrapper = styled.main`
-    flex-grow: 1; /* Allows this component to take up the remaining space */
+    flex-grow: 1;
     padding: 2rem 3rem;
     height: 100vh;
-    overflow-y: auto; /* Make content scrollable if it overflows */
+    overflow-y: auto;
 `;
 
 const PageTitle = styled.h1`
@@ -36,22 +50,11 @@ const SectionHeader = styled.h2`
 `;
 
 const Hr = styled.hr`
-    width: 100%;
-    margin: 2.5rem 0;
-    border: 0;
-    border-top: 1px solid #e5e7eb;
+  width: 100%;
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
 `;
-
-const formatValue = (num: number): string => {
-    if (num >= 1000000) {
-        return `$${(num / 1000000).toFixed(1)}M`;
-    }
-    if (num >= 1000) {
-        return `$${(num / 1000).toFixed(0)}K`;
-    }
-    return `$${num}`;
-};
-
 
 const MainContent = () => {
     const tokenResult = useGetTokens();
@@ -62,14 +65,17 @@ const MainContent = () => {
         if (!contracts || contracts.responseList.length === 0) {
             return {
                 totalValue: '$0M',
-                activeContracts: 0,
+                approvalRate: '0.0%',
                 expiringCount: 0,
-                approvalRate: '0.0%', // Default value
+                activeContracts: 0,
             };
         }
 
-        const MOCK_VALUES = [2400000, 3200000, 750000, 950000, 1800000, 500000, 600000, 700000, 800000];
-        const totalValue = MOCK_VALUES.reduce((sum, value) => sum + value, 0);
+        const totalValue = CONTRACT_MOCK_DATA
+            .reduce((sum, item) => sum + (item.value || 0), 0);
+
+        const approvedCount = contracts.responseList.filter(c => c['$3'] === 'Approved' || c['$3'] === 'Accepted').length;
+        const approvalRate = (approvedCount / contracts.responseList.length) * 100;
 
         const now = new Date();
         const thirtyDaysFromNow = new Date();
@@ -85,15 +91,11 @@ const MainContent = () => {
             }
         }).length;
 
-        // --- NEW: Calculate Approval Rate from real data ---
-        const approvedCount = contracts.responseList.filter(c => c['$3'] === 'Approved' || c['$3'] === 'Accepted').length;
-        const approvalRate = (approvedCount / contracts.responseList.length) * 100;
-
         return {
             totalValue: formatValue(totalValue),
             activeContracts: contracts.responseList.length,
             expiringCount: dueSoonCount,
-            approvalRate: `${approvalRate.toFixed(1)}%`, // Pass the calculated rate
+            approvalRate: `${approvalRate.toFixed(1)}%`,
         };
 
     }, [contracts]);
@@ -111,7 +113,10 @@ const MainContent = () => {
             {isLoading && <p>Loading contracts...</p>}
             {error && <p style={{ color: 'red' }}>Error fetching contracts: {error}</p>}
             {contracts && contracts.responseList.length > 0 && (
-                <ContractManager items={contracts.responseList} />
+                <ContractManager
+                    items={contracts.responseList}
+                    mockData={CONTRACT_MOCK_DATA}
+                />
             )}
         </ContentWrapper>
     );
