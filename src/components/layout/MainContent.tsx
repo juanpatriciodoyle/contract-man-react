@@ -1,36 +1,34 @@
-import React, { useMemo } from 'react';
+import React, {useMemo} from 'react';
 import styled from 'styled-components';
-import { useGetTokens } from '../../hooks/useGetTokens';
-import { useGetContracts, ApiResponse } from '../../hooks/useGetContracts';
+import {ApiResponse} from '../../hooks/useGetContracts';
 import Dashboard from '../dashboard/Dashboard';
 import ContractStatusOverview from '../dashboard/ContractStatusOverview';
 import ContractsByIndustry from '../dashboard/ContractsByIndustry';
-import { formatValue } from '../utils';
+import {formatValue} from '../utils';
 
 const ContentWrapper = styled.main`
-  flex-grow: 1;
-  padding: 2rem 3rem;
-  height: 100vh;
-  overflow-y: auto;
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    height: 100vh;
+    overflow-y: auto;
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  color: #111827;
-  margin-top: 0;
-  text-align: left;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 0;
+    text-align: left;
 `;
 
 const PageSubtitle = styled.p`
-  font-size: 1rem;
-  color: #6b7280;
-  margin-top: -0.5rem;
-  margin-bottom: 2.5rem;
-  text-align: left;
+    font-size: 1rem;
+    color: #6b7280;
+    margin-top: -0.5rem;
+    margin-bottom: 2.5rem;
+    text-align: left;
 `;
 
-// This new grid will hold our two chart components
 const ChartGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -46,7 +44,7 @@ interface MainContentProps {
     contracts: ApiResponse | null;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ contracts }) => {
+const MainContent: React.FC<MainContentProps> = ({contracts}) => {
     const kpiMetrics = useMemo(() => {
         if (!contracts || contracts.responseList.length === 0) {
             return {
@@ -71,7 +69,9 @@ const MainContent: React.FC<MainContentProps> = ({ contracts }) => {
             try {
                 const dueDate = new Date(c.CDRL_DUE_DATE);
                 return dueDate > now && dueDate <= thirtyDaysFromNow;
-            } catch (e) { return false; }
+            } catch (e) {
+                return false;
+            }
         }).length;
 
         return {
@@ -87,11 +87,11 @@ const MainContent: React.FC<MainContentProps> = ({ contracts }) => {
             <PageTitle>Dashboard Overview</PageTitle>
             <PageSubtitle>Comprehensive contract management and AI insights</PageSubtitle>
 
-            <Dashboard metrics={kpiMetrics} />
+            <Dashboard metrics={kpiMetrics}/>
 
             <ChartGrid>
-                <ContractStatusOverview items={contracts?.responseList || []} />
-                <ContractsByIndustry />
+                <ContractStatusOverview items={contracts?.responseList || []}/>
+                <ContractsByIndustry/>
             </ChartGrid>
         </ContentWrapper>
     );

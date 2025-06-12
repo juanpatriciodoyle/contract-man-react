@@ -72,8 +72,7 @@ const StyledNavLink = styled(NavLink)`
         }
     }
 
-    /* This is the active style based on your new image */
-    &.active {
+    &:active {
         background-image: linear-gradient(to right, #4f46e5, #6366f1);
         color: #ffffff;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -82,7 +81,6 @@ const StyledNavLink = styled(NavLink)`
             color: #ffffff;
         }
 
-        /* Override hover style when active */
         &:hover {
             background-image: linear-gradient(to right, #4f46e5, #6366f1);
         }
@@ -95,12 +93,11 @@ const LinkContent = styled.span`
     gap: 12px;
 `;
 
-// --- UPDATED BADGE STYLE HERE ---
 const NotificationBadge = styled.span`
-    background-color: #ef4444; /* Red background */
-    color: #ffffff; /* White text */
+    background-color: #ef4444;
+    color: #ffffff; 
     font-size: 0.75rem;
-    font-weight: 600; /* Bolder text */
+    font-weight: 600;
     padding: 2px 8px;
     border-radius: 9999px;
 `;
