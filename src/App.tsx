@@ -1,35 +1,56 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { GlobalStyle } from './styles/GlobalStyle';
+import {BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
+import {GlobalStyle} from './styles/GlobalStyle';
 import Sidebar from './components/layout/Sidebar';
 import MainContent from './components/layout/MainContent';
 import ContractDetail from './components/contracts/ContractDetail';
+import ContractsPage from './components/contracts/ContractsPage'; // Corrected import path
+import {useGetTokens} from './hooks/useGetTokens';
+import {useGetContracts} from './hooks/useGetContracts';
 
 const AppWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 `;
 
-const ContentShell = styled.div`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-`;
+const AppLayout: React.FC<{ contractCount: number }> = ({contractCount}) => (
+    <AppWrapper>
+        <Sidebar contractCount={contractCount}/>
+        {/* The Outlet will render the matched route's element (MainContent or ContractsPage) */}
+        <Outlet/>
+    </AppWrapper>
+);
 
 const App = () => {
+    const tokenResult = useGetTokens();
+    const claimsToken = tokenResult?.claims_token || '';
+    const {contracts, isLoading, error} = useGetContracts(claimsToken);
+
+    const contractCount = contracts?.responseList?.length || 0;
+
     return (
         <BrowserRouter>
-            <GlobalStyle />
-            <AppWrapper>
-                <Sidebar />
-                <ContentShell>
-                    <Routes>
-                        <Route path="/" element={<MainContent />} />
-                        <Route path="/contract/:contractId" element={<ContractDetail />} />
-                    </Routes>
-                </ContentShell>
-            </AppWrapper>
+            <GlobalStyle/>
+            <Routes>
+                <Route element={<AppLayout contractCount={contractCount}/>}>
+                    <Route
+                        path="/"
+                        element={<MainContent contracts={contracts}/>}
+                    />
+                    <Route
+                        path="/contracts"
+                        element={
+                            <ContractsPage
+                                contracts={contracts}
+                                isLoading={isLoading}
+                                error={error}
+                            />
+                        }
+                    />
+                </Route>
+                <Route path="/contract/:contractId" element={<ContractDetail/>}/>
+            </Routes>
         </BrowserRouter>
     );
 }
