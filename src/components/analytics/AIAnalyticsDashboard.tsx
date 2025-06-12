@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {Activity, AlertTriangle, Brain, CheckCircle, Clock, FileText, Target, Zap} from 'lucide-react';
+import {Activity, AlertTriangle, Brain, CheckCircle, Clock, FileText, LineChart, Target, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {Subtitle, Title} from '../ui/text';
 import {Chip} from '../ui/chip';
@@ -272,6 +272,7 @@ const AIAnalyticsDashboard: React.FC = () => {
             <SecondSection>
                 <StatusProgressBarChart
                     title="Risk Distribution"
+                    titleIcon={LineChart}
                     data={RISK_DISTRIBUTION_DATA}
                     showItemCountAndPercentage={true}
                     showItemValue={false}

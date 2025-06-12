@@ -17,6 +17,7 @@ interface StatusProgressBarChartProps {
     showItemValue?: boolean;
     showLeftIcon?: boolean;
     fontScale?: number;
+    titleIcon?: React.ElementType;
 }
 
 const CardWrapper = styled.div`
@@ -31,6 +32,9 @@ const CardTitle = styled.h3`
     font-weight: 600;
     color: #111827;
     margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 `;
 
 const ContentWrapper = styled.div`
@@ -125,12 +129,16 @@ const StatusProgressBarChart: React.FC<StatusProgressBarChartProps> = ({
                                                                            showItemValue = false,
                                                                            showLeftIcon = false,
                                                                            fontScale = 1,
+                                                                           titleIcon: TitleIcon,
                                                                        }) => {
     const maxCount = Math.max(...data.map(item => item.count || 0), 1);
 
     return (
         <CardWrapper>
-            <CardTitle>{title}</CardTitle>
+            <CardTitle>
+                {TitleIcon && <TitleIcon size={20} style={{marginRight: '0.5rem'}} />}
+                {title}
+            </CardTitle>
             <ContentWrapper>
                 <Legend>
                     {data.map(item => (
