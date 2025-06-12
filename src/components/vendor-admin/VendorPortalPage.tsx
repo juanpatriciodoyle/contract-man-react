@@ -8,21 +8,21 @@ import Table, {TableColumn} from '../ui/table/table';
 import {Chip} from '../ui/chip';
 import {ActionButton, ActionIcons} from '../ui/table/tableElements';
 
-const PageWrapper = styled.div`
+const PAGE_WRAPPER = styled.div`
     flex-grow: 1;
     padding: 2rem 2rem;
     height: 100vh;
     overflow-y: auto;
 `;
 
-const PageHeader = styled.div`
+const PAGE_HEADER = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2.5rem;
 `;
 
-const RegisterButton = styled.button`
+const REGISTER_BUTTON = styled.button`
     background-color: #4f46e5;
     color: #ffffff;
     padding: 0.75rem 1.5rem;
@@ -40,7 +40,7 @@ const RegisterButton = styled.button`
     }
 `;
 
-const KpiGrid = styled(motion.div)`
+const KPI_GRID = styled(motion.div)`
     display: grid;
     gap: 2.5rem;
     grid-template-columns: repeat(1, 1fr);
@@ -55,9 +55,9 @@ const KpiGrid = styled(motion.div)`
     }
 `;
 
-const CardRowItem = styled(motion.div)``;
+const CARD_ROW_ITEM = styled(motion.div)``;
 
-const SectionTitle = styled.h3`
+const SECTION_TITLE = styled.h3`
     font-size: 1rem;
     font-weight: 600;
     color: #111827;
@@ -92,17 +92,17 @@ const ITEM_VARIANTS = {
 };
 
 const VendorPortalPage: React.FC = () => {
-    const VENDOR_METRICS = {
+    const VENDOR_METRICS_DATA = {
         totalVendors: '0',
         verified: '0',
         pending: '0',
         rejected: '0',
     };
 
-    const VENDOR_KPI_DATA = [
+    const VENDOR_KPI_CARDS_DATA = [
         {
             title: "TOTAL VENDORS",
-            value: VENDOR_METRICS.totalVendors,
+            value: VENDOR_METRICS_DATA.totalVendors,
             change: "",
             $trend: "up" as 'up' | 'down' | 'warning',
             icon: Users,
@@ -110,7 +110,7 @@ const VendorPortalPage: React.FC = () => {
         },
         {
             title: "VERIFIED",
-            value: VENDOR_METRICS.verified,
+            value: VENDOR_METRICS_DATA.verified,
             change: "",
             $trend: "up" as 'up' | 'down' | 'warning',
             icon: CheckCircle,
@@ -118,7 +118,7 @@ const VendorPortalPage: React.FC = () => {
         },
         {
             title: "PENDING",
-            value: VENDOR_METRICS.pending,
+            value: VENDOR_METRICS_DATA.pending,
             change: "",
             $trend: "warning" as 'up' | 'down' | 'warning',
             icon: Clock,
@@ -126,7 +126,7 @@ const VendorPortalPage: React.FC = () => {
         },
         {
             title: "REJECTED",
-            value: VENDOR_METRICS.rejected,
+            value: VENDOR_METRICS_DATA.rejected,
             change: "",
             $trend: "down" as 'up' | 'down' | 'warning',
             icon: AlertTriangle,
@@ -134,9 +134,22 @@ const VendorPortalPage: React.FC = () => {
         },
     ];
 
-    const vendorTableData: VendorItem[] = [];
+    const VENDOR_TABLE_DATA: VendorItem[] = [];
 
-    const VENDOR_COLUMNS: TableColumn<VendorItem>[] = [
+    const getStatusChipType = (status: string) => {
+        switch (status) {
+            case 'verified':
+                return 'approved';
+            case 'pending':
+                return 'pending-review';
+            case 'rejected':
+                return 'rejected';
+            default:
+                return 'unknown';
+        }
+    };
+
+    const VENDOR_TABLE_COLUMNS: TableColumn<VendorItem>[] = [
         {key: 'company', label: 'Company', renderCell: (item) => <>{item.company}</>},
         {key: 'contact', label: 'Contact', renderCell: (item) => <>{item.contact}</>},
         {key: 'industry', label: 'Industry', renderCell: (item) => <>{item.industry}</>},
@@ -144,12 +157,7 @@ const VendorPortalPage: React.FC = () => {
             key: 'status',
             label: 'Status',
             renderCell: (item) => {
-                let chipType: 'approved' | 'pending-review' | 'need-more-info' | 'rejected' | 'ai-review' | 'accepted' | 'unknown' = 'unknown';
-                if (item.status === 'verified') chipType = 'approved';
-                else if (item.status === 'pending') chipType = 'pending-review';
-                else if (item.status === 'rejected') chipType = 'rejected';
-
-                return <Chip type={chipType}>{item.status}</Chip>;
+                return <Chip type={getStatusChipType(item.status)}>{item.status}</Chip>;
             },
         },
         {key: 'registeredDate', label: 'Registered', renderCell: (item) => <>{item.registeredDate}</>},
@@ -167,7 +175,7 @@ const VendorPortalPage: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
 
-    const TOOLBAR_PROPS = {
+    const VENDOR_TOOLBAR_PROPS = {
         searchQuery: searchQuery,
         onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
         selectedFilter: selectedFilter,
@@ -179,25 +187,25 @@ const VendorPortalPage: React.FC = () => {
     };
 
     return (
-        <PageWrapper>
-            <PageHeader>
+        <PAGE_WRAPPER>
+            <PAGE_HEADER>
                 <div>
                     <Title>Vendor Portal</Title>
                     <Subtitle>Manage vendor accounts and verification status</Subtitle>
                 </div>
-                <RegisterButton>
+                <REGISTER_BUTTON>
                     <Users size={20} style={{marginRight: '0.5rem'}}/>
                     Register Vendor
-                </RegisterButton>
-            </PageHeader>
+                </REGISTER_BUTTON>
+            </PAGE_HEADER>
 
-            <KpiGrid
+            <KPI_GRID
                 variants={CONTAINER_VARIANTS}
                 initial="hidden"
                 animate="visible"
             >
-                {VENDOR_KPI_DATA.map((card) => (
-                    <CardRowItem key={card.title} variants={ITEM_VARIANTS}>
+                {VENDOR_KPI_CARDS_DATA.map((card) => (
+                    <CARD_ROW_ITEM key={card.title} variants={ITEM_VARIANTS}>
                         <KPICard
                             title={card.title}
                             value={card.value}
@@ -206,19 +214,19 @@ const VendorPortalPage: React.FC = () => {
                             icon={card.icon}
                             $color={card.$color}
                         />
-                    </CardRowItem>
+                    </CARD_ROW_ITEM>
                 ))}
-            </KpiGrid>
+            </KPI_GRID>
 
-            <SectionTitle>Vendor Management ({vendorTableData.length})</SectionTitle>
+            <SECTION_TITLE>Vendor Management ({VENDOR_TABLE_DATA.length})</SECTION_TITLE>
             <Table<VendorItem>
-                columns={VENDOR_COLUMNS}
-                data={vendorTableData}
+                columns={VENDOR_TABLE_COLUMNS}
+                data={VENDOR_TABLE_DATA}
                 emptyMessage="No vendors registered yet"
                 showToolbar={false}
-                toolbarProps={TOOLBAR_PROPS}
+                toolbarProps={VENDOR_TOOLBAR_PROPS}
             />
-        </PageWrapper>
+        </PAGE_WRAPPER>
     );
 };
 
