@@ -1,11 +1,11 @@
 // src/components/contracts/ContractManager.tsx
 
-import React, { useState, useEffect, useRef, JSX } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, Edit, Trash2, Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
-import { ResponseItem } from '../../hooks/useGetContracts';
-import { StatusBadge } from './StatusBadge';
+import {AnimatePresence, motion} from 'framer-motion';
+import {ChevronDown, Edit, Eye, Search, SlidersHorizontal, Trash2} from 'lucide-react';
+import {ResponseItem} from '../../hooks/useGetContracts';
+import {StatusBadge} from './StatusBadge';
 
 // --- MOCK DATA ---
 // This data is used to fill the "Value" and "AI Score" columns for the demo.

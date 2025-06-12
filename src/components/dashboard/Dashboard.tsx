@@ -2,64 +2,36 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import KPICard from './KPICard';
-// Updated imports for the new icons
-import { DollarSign, Check, Calendar, Clock } from 'lucide-react';
+import { DollarSign, Check, Calendar, Package } from 'lucide-react';
 
-// New data array matching your image
-const KPI_DATA = [
-    {
-        title: "AVG. PROCESSING TIME",
-        value: "4.2 days",
-        change: "-12% from last month",
-        trend: "down",
-        icon: Clock,
-        color: "blue",
-    },
-    {
-        title: "APPROVAL RATE",
-        value: "40.0%",
-        change: "+5% from last month",
-        trend: "up",
-        icon: Check,
-        color: "green",
-    },
-    {
-        title: "EXPIRING (30 DAYS)",
-        value: "0",
-        change: "Needs attention",
-        trend: "warning",
-        icon: Calendar,
-        color: "yellow",
-    },
-    {
-        title: "TOTAL CONTRACT VALUE",
-        value: "$9M",
-        change: "+18% from last quarter",
-        trend: "up",
-        icon: DollarSign,
-        color: "purple",
-    },
-];
+// Interface for the props our Dashboard will receive
+interface KpiMetrics {
+    totalValue: string;
+    approvalRate: string;
+    expiringCount: number;
+    activeContracts: number;
+}
+
+interface DashboardProps {
+    metrics: KpiMetrics;
+}
 
 // This styled-component creates our responsive grid
 const DashboardGrid = styled(motion.div)`
     width: 100%;
-    max-width: 80rem; /* max-w-7xl */
+    max-width: 80rem;
     margin: 0 auto;
     padding: 1rem;
 
     display: grid;
-    gap: 1.5rem; /* gap-6 */
+    gap: 1.5rem;
 
-    /* Mobile-first: default to 1 column */
     grid-template-columns: repeat(1, 1fr);
 
-    /* Tablet: 2 columns */
     @media (min-width: 640px) {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* Desktop: 4 columns */
     @media (min-width: 1024px) {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -83,7 +55,43 @@ const itemVariants = {
     }
 };
 
-const Dashboard = () => {
+const Dashboard: React.FC<DashboardProps> = ({ metrics }) => {
+    // The KPI_DATA array is now built dynamically from the props
+    const KPI_DATA = [
+        {
+            title: "TOTAL CONTRACT VALUE",
+            value: metrics.totalValue,
+            change: "+18% from last quarter",
+            trend: "up",
+            icon: DollarSign,
+            color: "purple",
+        },
+        {
+            title: "ACTIVE CONTRACTS",
+            value: `${metrics.activeContracts}`,
+            change: "All contracts",
+            trend: "up",
+            icon: Package,
+            color: "green",
+        },
+        {
+            title: "APPROVAL RATE",
+            value: metrics.approvalRate,
+            change: "+5% from last month",
+            trend: "up",
+            icon: Check,
+            color: "green",
+        },
+        {
+            title: "EXPIRING (30 DAYS)",
+            value: String(metrics.expiringCount),
+            change: "Needs attention",
+            trend: "warning",
+            icon: Calendar,
+            color: "yellow",
+        },
+    ];
+
     return (
         <DashboardGrid
             variants={containerVariants}
