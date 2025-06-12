@@ -113,10 +113,19 @@ const Divider = styled.div`
     margin-bottom: 1rem;
 `;
 
-const SecondSection = styled.div`
+const ChartGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+    }
+`;
+
+const ChartWrapper = styled.div`
+    height: fit-content;
 `;
 
 const KPI_ANALYTICS_DATA = [
@@ -269,17 +278,18 @@ const AIAnalyticsDashboard: React.FC = () => {
                 ))}
             </AnalyticsGrid>
 
-            <SecondSection>
-                <StatusProgressBarChart
-                    title="Risk Distribution"
-                    titleIcon={LineChart}
-                    data={RISK_DISTRIBUTION_DATA}
-                    showItemCountAndPercentage={true}
-                    showItemValue={false}
-                    showLeftIcon={false}
-                    fontScale={1}
-                />
-
+            <ChartGrid>
+                <ChartWrapper>
+                    <StatusProgressBarChart
+                        title="Risk Distribution"
+                        titleIcon={LineChart}
+                        data={RISK_DISTRIBUTION_DATA}
+                        showItemCountAndPercentage={true}
+                        showItemValue={false}
+                        showLeftIcon={false}
+                        fontScale={1}
+                    />
+                </ChartWrapper>
                 <CardWrapper>
                     <SectionTitle>
                         <Brain size={20}/>
@@ -317,7 +327,7 @@ const AIAnalyticsDashboard: React.FC = () => {
                         ))}
                     </RecentAnalysesList>
                 </CardWrapper>
-            </SecondSection>
+            </ChartGrid>
         </PageWrapper>
     );
 };
