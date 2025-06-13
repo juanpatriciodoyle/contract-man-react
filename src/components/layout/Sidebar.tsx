@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import {LayoutDashboard, FileText, Bot, Users, BarChart2, FileBarChart} from 'lucide-react';
+import {NavLink} from 'react-router-dom';
+import {BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, Users} from 'lucide-react';
 
 const SidebarWrapper = styled.div`
-    width: 280px;
+    width: 300px;
     background-color: #ffffff;
     border-right: 1px solid #e5e7eb;
     padding: 1.5rem;
@@ -37,6 +37,12 @@ const AppTitle = styled.h1`
     font-size: 1.25rem;
     font-weight: 600;
     margin: 0;
+`;
+
+const AppSubtitle = styled.p`
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
 `;
 
 const NavList = styled.nav`
@@ -110,43 +116,46 @@ interface SidebarProps {
     contractCount: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ contractCount }) => {
+const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
     return (
         <SidebarWrapper>
             <LogoWrapper>
-                <LogoIcon><Bot size={24} /></LogoIcon>
-                <AppTitle>ContractFlow</AppTitle>
+                <LogoIcon><Bot size={24}/></LogoIcon>
+                <div>
+                    <AppTitle>ContractFlow</AppTitle>
+                    <AppSubtitle>AI-Powered Management</AppSubtitle>
+                </div>
             </LogoWrapper>
             <SeparatorLine/>
             <NavList>
                 <StyledNavLink to="/">
                     <LinkContent>
-                        <LayoutDashboard size={20} />
+                        <LayoutDashboard size={20}/>
                         Dashboard
                     </LinkContent>
                 </StyledNavLink>
                 <StyledNavLink to="/contracts">
                     <LinkContent>
-                        <FileText size={20} />
+                        <FileText size={20}/>
                         Contracts
                     </LinkContent>
                     {contractCount > 0 && <NotificationBadge>{contractCount}</NotificationBadge>}
                 </StyledNavLink>
                 <StyledNavLink to="/ai-analytics">
                     <LinkContent>
-                        <BarChart2 size={20} />
+                        <BarChart2 size={20}/>
                         AI Analytics
                     </LinkContent>
                 </StyledNavLink>
                 <StyledNavLink to="/admin-vendors">
                     <LinkContent>
-                        <Users size={20} />
+                        <Users size={20}/>
                         Vendors
                     </LinkContent>
                 </StyledNavLink>
                 <StyledNavLink to="/reports">
                     <LinkContent>
-                        <FileBarChart size={20} />
+                        <FileBarChart size={20}/>
                         Reports
                     </LinkContent>
                 </StyledNavLink>
