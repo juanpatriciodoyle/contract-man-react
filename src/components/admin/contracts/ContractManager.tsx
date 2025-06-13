@@ -1,8 +1,8 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {Edit, Eye, Trash2} from 'lucide-react';
 import {ResponseItem} from '../../../hooks/useGetContracts';
 import {useNavigate} from 'react-router-dom';
-import {formatValue} from '../../utils';
+import {formatValue, getStatusChipType, parseValue} from '../../utils';
 
 import Table, {TableColumn} from '../../ui/table/table';
 
@@ -27,35 +27,25 @@ interface ContractTableItem extends ResponseItem {
 
 interface ContractManagerProps {
     items: ResponseItem[];
-    mockData: { value: number | null; aiScore: number }[];
 }
 
-const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
+const ContractManager: React.FC<ContractManagerProps> = ({items}) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('All Status');
     const navigate = useNavigate();
 
-    const getStatusChipType = useCallback((status: string) => {
-        switch (status) {
-            case 'Approved':
-            case 'Accepted':
-                return 'approved';
-            case 'Pending':
-                return 'pending-review';
-            case 'Rejected':
-                return 'rejected';
-            case 'Needs Review':
-                return 'need-more-info';
-            default:
-                return 'unknown';
-        }
-    }, []);
+    const combinedItems: ContractTableItem[] = items.map((item) => {
+        // Assume 'PCN' contains the contract value as a string that can be parsed.
+        // If the API provides a different field for value, please update this.
+        const value = parseValue(item['$6']); // Using $6 as per MainContent.tsx refactor
+        const aiScore = Math.floor(Math.random() * (99 - 60 + 1)) + 60; // Dynamically generate a random AI score between 60 and 99
 
-    const combinedItems: ContractTableItem[] = items.map((item, index) => ({
-        ...item,
-        value: mockData[index]?.value || null,
-        aiScore: mockData[index]?.aiScore || 0,
-    }));
+        return {
+            ...item,
+            value,
+            aiScore,
+        };
+    });
 
     const filteredItems = combinedItems.filter(item => {
         const matchesSearch = item.TITLE.toLowerCase().includes(searchQuery.toLowerCase());
@@ -65,7 +55,7 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
 
     const CONTRACT_COLUMNS: TableColumn<ContractTableItem>[] = [
         {
-            key: 'title',
+            key: 'contract',
             label: 'Contract',
             renderCell: (item) => (
                 <>

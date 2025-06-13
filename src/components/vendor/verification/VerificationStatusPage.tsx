@@ -3,25 +3,9 @@ import styled from 'styled-components';
 import {Subtitle, Title} from '../../ui/text';
 import {CloudUpload, Scan, ShieldCheck, ClipboardCheck, CheckCircle} from 'lucide-react';
 import ProgressSteps from '../../ui/progressSteps';
+import { CardLayout } from '../../ui/CardLayout';
+import { PageContainer } from '../../layout/PageContainer';
 
-const PageWrapper = styled.div`
-    flex-grow: 1;
-    padding: 2rem 2rem;
-    height: 100vh;
-    overflow-y: auto;
-`;
-
-const UploadSection = styled.div`
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    padding: 2.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
-    margin-top: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
 
 const DropArea = styled.div`
     border: 2px dashed #d1d5db;
@@ -109,13 +93,13 @@ const VerificationStatusPage: React.FC = () => {
     };
 
     return (
-        <PageWrapper>
+        <PageContainer>
             <Title>Verification Status</Title>
             <Subtitle>Upload and process your contract with AI-powered analysis</Subtitle>
 
             <ProgressSteps steps={VERIFICATION_STEPS} currentStepId={CURRENT_STEP} />
 
-            <UploadSection>
+            <CardLayout $marginTop="2.5rem" $padding="2.5rem">
                 <h3 style={{fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '1.5rem'}}>
                     Upload Contract Document
                 </h3>
@@ -138,8 +122,8 @@ const VerificationStatusPage: React.FC = () => {
                 <SupportedFormats>
                     {SUPPORTED_FORMATS_TEXT}
                 </SupportedFormats>
-            </UploadSection>
-        </PageWrapper>
+            </CardLayout>
+        </PageContainer>
     );
 };
 

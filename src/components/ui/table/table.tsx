@@ -4,13 +4,7 @@ import {motion, AnimatePresence} from 'framer-motion';
 import {Toolbar, ToolbarProps} from '../toolbar';
 import {TableRowAnimated} from './tableElements';
 import {ChevronUp, ChevronDown} from 'lucide-react';
-
-const ManagerWrapper = styled.div`
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
-`;
+import { CardLayout } from '../CardLayout';
 
 export const TableWrapper = styled.div`
     width: 100%;
@@ -114,7 +108,7 @@ function Table<T>({
     });
 
     return (
-        <ManagerWrapper>
+        <CardLayout $padding="1.5rem">
             {showToolbar && toolbarProps && (
                 <Toolbar {...toolbarProps} />
             )}
@@ -168,7 +162,7 @@ function Table<T>({
                     </tbody>
                 </StyledTable>
             </TableWrapper>
-        </ManagerWrapper>
+        </CardLayout>
     );
 }
 

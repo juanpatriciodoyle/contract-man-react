@@ -3,17 +3,11 @@ import styled from 'styled-components';
 import {AlertTriangle, CheckCircle, Clock, Users} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {motion} from 'framer-motion';
-import {Subtitle, Title} from "../../ui/text";
+import {Subtitle, Title, SectionHeader} from "../../ui/text"; // Import SectionHeader
 import Table, {TableColumn} from '../../ui/table/table';
 import {Chip} from '../../ui/chip';
 import {ActionButton, ActionIcons} from '../../ui/table/tableElements';
-
-const PAGE_WRAPPER = styled.div`
-    flex-grow: 1;
-    padding: 2rem 2rem;
-    height: 100vh;
-    overflow-y: auto;
-`;
+import { PageContainer } from '../../layout/PageContainer';
 
 const PAGE_HEADER = styled.div`
     display: flex;
@@ -57,12 +51,8 @@ const KPI_GRID = styled(motion.div)`
 
 const CARD_ROW_ITEM = styled(motion.div)``;
 
-const SECTION_TITLE = styled.h3`
-    font-size: 1rem;
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 1.5rem 0;
-`;
+// SECTION_TITLE styled component is no longer needed here,
+// as it will be replaced by SectionHeader.
 
 interface VendorItem {
     id: string;
@@ -187,7 +177,7 @@ const VendorPortalPage: React.FC = () => {
     };
 
     return (
-        <PAGE_WRAPPER>
+        <PageContainer>
             <PAGE_HEADER>
                 <div>
                     <Title>Vendor Portal</Title>
@@ -218,7 +208,7 @@ const VendorPortalPage: React.FC = () => {
                 ))}
             </KPI_GRID>
 
-            <SECTION_TITLE>Vendor Management ({VENDOR_TABLE_DATA.length})</SECTION_TITLE>
+            <SectionHeader size="1rem">Vendor Management ({VENDOR_TABLE_DATA.length})</SectionHeader>
             <Table<VendorItem>
                 columns={VENDOR_TABLE_COLUMNS}
                 data={VENDOR_TABLE_DATA}
@@ -226,7 +216,7 @@ const VendorPortalPage: React.FC = () => {
                 showToolbar={false}
                 toolbarProps={VENDOR_TOOLBAR_PROPS}
             />
-        </PAGE_WRAPPER>
+        </PageContainer>
     );
 };
 

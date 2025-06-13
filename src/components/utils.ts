@@ -24,3 +24,20 @@ export const formatValue = (num: number | null): string => {
     }
     return `$${num}`;
 };
+
+export const getStatusChipType = (status: string) => {
+    switch (status) {
+        case 'Approved':
+            return 'approved';
+        case 'Pending':
+            return 'pending-review';
+        case 'Needs Review':
+            return 'need-more-info';
+        case 'Rejected':
+            return 'rejected';
+        case 'Verified':
+            return 'approved';
+        default:
+            return 'unknown';
+    }
+};

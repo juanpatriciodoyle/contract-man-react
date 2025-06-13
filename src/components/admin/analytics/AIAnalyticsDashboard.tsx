@@ -3,17 +3,12 @@ import styled from 'styled-components';
 import {motion} from 'framer-motion';
 import {Activity, AlertTriangle, Brain, CheckCircle, Clock, FileText, LineChart, Target, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
-import {Subtitle, Title} from '../../ui/text';
+import {Subtitle, Title, SectionHeader} from '../../ui/text'; // Import SectionHeader
 import {Chip} from '../../ui/chip';
 import StatusProgressBarChart from '../../ui/statusProgressBarChart';
+import { CardLayout } from '../../ui/CardLayout';
+import { PageContainer } from '../../layout/PageContainer';
 
-
-const PageWrapper = styled.div`
-    flex-grow: 1;
-    padding: 2rem 2rem;
-    height: 100vh;
-    overflow-y: auto;
-`;
 
 const AnalyticsGrid = styled(motion.div)`
     width: 100%;
@@ -35,23 +30,8 @@ const AnalyticsGrid = styled(motion.div)`
     margin: 0 auto 2.5rem;
 `;
 
-const CardWrapper = styled.div`
-    background-color: #ffffff;
-    height: fit-content;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
-`;
-
-const SectionTitle = styled.h3`
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-`;
-
+// SectionTitle styled component is no longer needed here,
+// as it will be replaced by SectionHeader.
 
 const RecentAnalysesList = styled.ul`
     list-style: none;
@@ -240,7 +220,7 @@ const ITEM_VARIANTS = {
 
 const AIAnalyticsDashboard: React.FC = () => {
     return (
-        <PageWrapper>
+        <PageContainer>
             <Title>AI Analytics Dashboard</Title>
             <Subtitle>Advanced insights and automated contract analysis</Subtitle>
 
@@ -259,10 +239,10 @@ const AIAnalyticsDashboard: React.FC = () => {
                 ))}
             </AnalyticsGrid>
 
-            <SectionTitle>
+            <SectionHeader>
                 <Zap size={20}/>
                 AI Performance Trends
-            </SectionTitle>
+            </SectionHeader>
             <AnalyticsGrid variants={CONTAINER_VARIANTS} initial="hidden" animate="visible">
                 {AI_PERFORMANCE_TRENDS_DATA.map((card) => (
                     <motion.div key={card.title} variants={ITEM_VARIANTS}>
@@ -290,11 +270,11 @@ const AIAnalyticsDashboard: React.FC = () => {
                         fontScale={1}
                     />
                 </ChartWrapper>
-                <CardWrapper>
-                    <SectionTitle>
+                <CardLayout>
+                    <SectionHeader>
                         <Brain size={20}/>
                         Recent AI Analyses
-                    </SectionTitle>
+                    </SectionHeader>
                     <RecentAnalysesList>
                         {RECENT_ANALYSES_DATA.map((item) => (
                             <RecentAnalysisItem key={item.title}>
@@ -326,9 +306,9 @@ const AIAnalyticsDashboard: React.FC = () => {
                             </RecentAnalysisItem>
                         ))}
                     </RecentAnalysesList>
-                </CardWrapper>
+                </CardLayout>
             </ChartGrid>
-        </PageWrapper>
+        </PageContainer>
     );
 };
 

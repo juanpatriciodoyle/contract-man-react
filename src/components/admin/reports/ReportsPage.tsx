@@ -3,19 +3,14 @@ import styled from 'styled-components';
 import {motion} from 'framer-motion';
 import {Check, Clock, DollarSign, Download, FileText, Users, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
-import {Subtitle, Title} from '../../ui/text';
+import {Subtitle, Title, SectionHeader} from '../../ui/text'; // Import SectionHeader
 import StatusProgressBarChart from '../../ui/statusProgressBarChart';
 import {jsPDF} from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
-
-const PageWrapper = styled.div`
-    flex-grow: 1;
-    padding: 2rem 2rem;
-    height: 100vh;
-    overflow-y: auto;
-`;
+import { CardLayout } from '../../ui/CardLayout';
+import { PageContainer } from '../../layout/PageContainer';
 
 const AnalyticsGrid = styled(motion.div)`
     width: 100%;
@@ -49,31 +44,8 @@ const ChartGrid = styled.div`
     }
 `;
 
-const CardWrapper = styled.div`
-    background-color: #ffffff;
-    height: fit-content;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
-`;
-
-const CardTitle = styled.h3`
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-`;
-
-const SectionTitle = styled.h2`
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-`;
+// CardTitle and SectionTitle styled components are no longer needed here,
+// as they will be replaced by SectionHeader.
 
 const MonthlyTrendItem = styled.li`
     display: flex;
@@ -108,13 +80,6 @@ const RiskAnalysisGrid = styled(AnalyticsGrid)`
     @media (min-width: 1024px) {
         grid-template-columns: repeat(4, 1fr);
     }
-`;
-
-const ExportOptionsContainer = styled(CardWrapper)`
-    margin-top: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
 `;
 
 const ExportButtons = styled.div`
@@ -297,7 +262,6 @@ const ReportsPage: React.FC = () => {
                 if (cursorY + imgHeight + margin > pdfHeight) {
                     pdf.addPage();
                     currentPage++;
-                    cursorY = margin;
                     addHeaderAndFooter(currentPage, 0);
                 }
 
@@ -322,8 +286,7 @@ const ReportsPage: React.FC = () => {
         const kpiFlatData = KPI_REPORTS_DATA.map(kpi => ({
             Title: kpi.title,
             Value: kpi.value,
-            Change: kpi.change,
-            Trend: kpi.$trend,
+            Change: kpi.$trend,
         }));
         XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(kpiFlatData), "KPI Summary");
 
@@ -402,7 +365,7 @@ const ReportsPage: React.FC = () => {
     };
 
     return (
-        <PageWrapper>
+        <PageContainer>
             <Title>Reports & Analytics</Title>
             <Subtitle>Comprehensive insights and performance metrics</Subtitle>
 
@@ -422,10 +385,10 @@ const ReportsPage: React.FC = () => {
             </AnalyticsGrid>
 
             <ChartGrid>
-                <CardWrapper id="monthly-trends-section">
-                    <CardTitle>
+                <CardLayout id="monthly-trends-section">
+                    <SectionHeader>
                         Monthly Contract Trends
-                    </CardTitle>
+                    </SectionHeader>
                     <MonthlyTrendList>
                         {MONTHLY_CONTRACT_TRENDS_DATA.map((item) => (
                             <MonthlyTrendItem key={item.month}>
@@ -436,7 +399,7 @@ const ReportsPage: React.FC = () => {
                             </MonthlyTrendItem>
                         ))}
                     </MonthlyTrendList>
-                </CardWrapper>
+                </CardLayout>
                 <div id="top-vendors-section-wrapper">
                     <StatusProgressBarChart
                         title="Top Performing Vendors"
@@ -456,10 +419,10 @@ const ReportsPage: React.FC = () => {
                 </div>
             </ChartGrid>
 
-            <SectionTitle>
+            <SectionHeader as="h2">
                 <Zap size={20}/>
                 Risk Analysis by Category
-            </SectionTitle>
+            </SectionHeader>
             <RiskAnalysisGrid id="risk-analysis-section" variants={containerVariants} initial="hidden"
                               animate="visible">
                 {RISK_ANALYSIS_CATEGORY_DATA.map((categoryData) => (
@@ -476,14 +439,13 @@ const ReportsPage: React.FC = () => {
                             showItemCountAndPercentage={false}
                             showItemValue={true}
                             showLeftIcon={false}
-                            fontScale={0.9}
                         />
                     </motion.div>
                 ))}
             </RiskAnalysisGrid>
 
-            <ExportOptionsContainer id="export-options-section">
-                <CardTitle>Export Options</CardTitle>
+            <CardLayout id="export-options-section" $marginTop="2.5rem">
+                <SectionHeader>Export Options</SectionHeader>
                 <ExportButtons>
                     <ExportButton onClick={handleExportPdf}>
                         <Download size={16}/>
@@ -498,8 +460,8 @@ const ReportsPage: React.FC = () => {
                         Export as CSV
                     </ExportButton>
                 </ExportButtons>
-            </ExportOptionsContainer>
-        </PageWrapper>
+            </CardLayout>
+        </PageContainer>
     );
 };
 

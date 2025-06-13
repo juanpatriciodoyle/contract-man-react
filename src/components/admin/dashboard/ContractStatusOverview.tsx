@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { ResponseItem } from '../../../hooks/useGetContracts';
 import StatusProgressBarChart from '../../ui/statusProgressBarChart';
+import { CardLayout } from '../../ui/CardLayout';
 
 interface OverviewProps {
     items: ResponseItem[];
@@ -39,14 +40,16 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
     }));
 
     return (
-        <StatusProgressBarChart
-            title="Contract Status Overview"
-            data={CHART_DATA}
-            showItemCountAndPercentage={true}
-            showItemValue={false}
-            showLeftIcon={false}
-            fontScale={1}
-        />
+        <CardLayout>
+            <StatusProgressBarChart
+                title="Contract Status Overview"
+                data={CHART_DATA}
+                showItemCountAndPercentage={true}
+                showItemValue={false}
+                showLeftIcon={false}
+                fontScale={1}
+            />
+        </CardLayout>
     );
 };
 

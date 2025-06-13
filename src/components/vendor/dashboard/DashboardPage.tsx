@@ -1,20 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {Subtitle, Title} from '../../ui/text';
+import {Subtitle, Title, SectionHeader} from '../../ui/text';
 import KPICard from '../../admin/dashboard/KPICard';
 import {CheckCircle, Clock, CloudUpload, DollarSign, Edit, Eye, FileText, Trash2} from 'lucide-react';
 import Table, {TableColumn} from '../../ui/table/table';
 import {Chip} from '../../ui/chip';
 import {ActionButton, ActionIcons, ContractTitle} from '../../ui/table/tableElements';
-import {formatValue} from '../../utils';
-
-const PageWrapper = styled.div`
-    flex-grow: 1;
-    padding: 2rem 2rem;
-    height: 100vh;
-    overflow-y: auto;
-`;
+import {formatValue, getStatusChipType} from '../../utils';
+import { CardLayout } from '../../ui/CardLayout';
+import { PageContainer } from '../../layout/PageContainer';
 
 const KpiGrid = styled(motion.div)`
     width: 100%;
@@ -34,16 +29,6 @@ const KpiGrid = styled(motion.div)`
     margin: 0 auto 2.5rem;
 `;
 
-const SectionTitle = styled.h3`
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-`;
-
 const DashboardGrid = styled.div`
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -52,14 +37,6 @@ const DashboardGrid = styled.div`
     @media (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
-`;
-
-const CardWrapper = styled.div`
-    background-color: #ffffff;
-    height: fit-content;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
 `;
 
 const VerificationStatusItem = styled.div`
@@ -187,21 +164,6 @@ const RECENT_CONTRACTS_DATA: RecentContract[] = [
     },
 ];
 
-const getStatusChipType = (status: string) => {
-    switch (status) {
-        case 'Approved':
-            return 'approved';
-        case 'Pending':
-            return 'pending-review';
-        case 'Needs Review':
-            return 'need-more-info';
-        case 'Rejected':
-            return 'rejected';
-        default:
-            return 'unknown';
-    }
-};
-
 const RECENT_CONTRACTS_COLUMNS: TableColumn<RecentContract>[] = [
     {
         key: 'contract',
@@ -259,7 +221,7 @@ const VendorDashboardPage: React.FC = () => {
     }, []);
 
     return (
-        <PageWrapper>
+        <PageContainer>
             <Title>Vendor Dashboard</Title>
             <Subtitle>Track your contract submissions and business performance</Subtitle>
 
@@ -279,8 +241,8 @@ const VendorDashboardPage: React.FC = () => {
             </KpiGrid>
 
             <DashboardGrid>
-                <CardWrapper>
-                    <SectionTitle>Recent Contract Submissions</SectionTitle>
+                <CardLayout>
+                    <SectionHeader>Recent Contract Submissions</SectionHeader>
                     <Table<RecentContract>
                         columns={RECENT_CONTRACTS_COLUMNS}
                         data={RECENT_CONTRACTS_DATA}
@@ -297,11 +259,11 @@ const VendorDashboardPage: React.FC = () => {
                         }}>View All
                         </button>
                     </div>
-                </CardWrapper>
+                </CardLayout>
 
                 <div>
-                    <CardWrapper style={{marginBottom: '2.5rem'}}>
-                        <SectionTitle>Verification Status</SectionTitle>
+                    <CardLayout $marginBottom="2.5rem">
+                        <SectionHeader>Verification Status</SectionHeader>
                         <VerificationStatusItem>
                             <span>Account Status</span>
                             <Chip type="approved" showIcon={true}>Verified</Chip>
@@ -318,10 +280,10 @@ const VendorDashboardPage: React.FC = () => {
                             Fully verified vendor <br/>
                             <span style={{ fontSize: '0.75rem' }}>last updated: {currentDate}</span>
                         </p>
-                    </CardWrapper>
+                    </CardLayout>
 
-                    <CardWrapper>
-                        <SectionTitle>Quick Actions</SectionTitle>
+                    <CardLayout>
+                        <SectionHeader>Quick Actions</SectionHeader>
                         <ButtonGroup>
                             <QuickActionsButton>
                                 <CloudUpload size={20}/> Submit New Contract
@@ -336,10 +298,10 @@ const VendorDashboardPage: React.FC = () => {
                                 <Eye size={20}/> Report Issue
                             </QuickActionsButton>
                         </ButtonGroup>
-                    </CardWrapper>
+                    </CardLayout>
                 </div>
             </DashboardGrid>
-        </PageWrapper>
+        </PageContainer>
     );
 };
 

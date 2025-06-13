@@ -2,13 +2,13 @@ import React, { JSX } from 'react';
 import styled from 'styled-components';
 import { Circle, CircleCheck, AlertCircle, Search, Clock } from 'lucide-react';
 
-interface ChipProps {
+export interface ChipProps {
     type: 'approved' | 'pending-review' | 'need-more-info' | 'rejected' | 'ai-review' | 'accepted' | 'unknown';
     children: React.ReactNode;
     showIcon?: boolean;
 }
 
-const CHIP_STYLES: { [key: string]: { bg: string; text: string; icon: JSX.Element } } = {
+export const CHIP_STYLES: { [key: string]: { bg: string; text: string; icon: JSX.Element } } = {
     'approved': { bg: '#dcfce7', text: '#16a34a', icon: <CircleCheck size={14} /> },
     'pending-review': { bg: '#fef9c3', text: '#ca8a04', icon: <Clock size={14} /> },
     'need-more-info': { bg: '#FEE2E2', text: '#EF4444', icon: <AlertCircle size={14} /> },

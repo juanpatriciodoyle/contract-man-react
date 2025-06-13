@@ -4,15 +4,9 @@ import {ApiResponse} from '../../hooks/useGetContracts';
 import Dashboard from '../admin/dashboard/Dashboard';
 import ContractStatusOverview from '../admin/dashboard/ContractStatusOverview';
 import ContractsByIndustry from '../admin/dashboard/ContractsByIndustry';
-import {formatValue} from '../utils';
+import {formatValue, parseValue} from '../utils';
 import {Subtitle, Title} from "../ui/text";
-
-const ContentWrapper = styled.main`
-    flex-grow: 1;
-    padding: 2rem 2rem;
-    height: 100vh;
-    overflow-y: auto;
-`;
+import { PageContainer } from './PageContainer';
 
 const ChartGrid = styled.div`
     display: grid;
@@ -30,7 +24,7 @@ interface MainContentProps {
 }
 
 const MainContent: React.FC<MainContentProps> = ({contracts}) => {
-    const kpiMetrics = useMemo(() => {
+    const KPI_METRICS = useMemo(() => {
         if (!contracts || contracts.responseList.length === 0) {
             return {
                 totalValue: '$0M',
@@ -40,45 +34,47 @@ const MainContent: React.FC<MainContentProps> = ({contracts}) => {
             };
         }
 
-        const MOCK_VALUES = [2400000, 3200000, 750000, 950000, 1800000, 500000, 600000, 700000, 800000];
-        const totalValue = MOCK_VALUES.reduce((sum, value) => sum + (value || 0), 0);
+        const TOTAL_CONTRACT_VALUE = contracts.responseList.reduce((sum, contract) => {
+            const value = parseValue(contract['$6']);
+            return sum + value;
+        }, 0);
 
-        const approvedCount = contracts.responseList.filter(c => c['$3'] === 'Approved' || c['$3'] === 'Accepted').length;
-        const approvalRate = (approvedCount / contracts.responseList.length) * 100;
+        const APPROVED_COUNT = contracts.responseList.filter(c => c['$3'] === 'Approved' || c['$3'] === 'Accepted').length;
+        const APPROVAL_RATE = (APPROVED_COUNT / contracts.responseList.length) * 100;
 
-        const now = new Date();
-        const thirtyDaysFromNow = new Date();
-        thirtyDaysFromNow.setDate(now.getDate() + 30);
-        const dueSoonCount = contracts.responseList.filter(c => {
+        const NOW = new Date();
+        const THIRTY_DAYS_FROM_NOW = new Date();
+        THIRTY_DAYS_FROM_NOW.setDate(NOW.getDate() + 30);
+        const EXPIRING_COUNT = contracts.responseList.filter(c => {
             if (!c.CDRL_DUE_DATE) return false;
             try {
-                const dueDate = new Date(c.CDRL_DUE_DATE);
-                return dueDate > now && dueDate <= thirtyDaysFromNow;
+                const DUE_DATE = new Date(c.CDRL_DUE_DATE);
+                return DUE_DATE > NOW && DUE_DATE <= THIRTY_DAYS_FROM_NOW;
             } catch (e) {
                 return false;
             }
         }).length;
 
         return {
-            totalValue: formatValue(totalValue),
+            totalValue: formatValue(TOTAL_CONTRACT_VALUE),
             activeContracts: contracts.responseList.length,
-            expiringCount: dueSoonCount,
-            approvalRate: `${approvalRate.toFixed(1)}%`,
+            expiringCount: EXPIRING_COUNT,
+            approvalRate: `${APPROVAL_RATE.toFixed(1)}%`,
         };
     }, [contracts]);
 
     return (
-        <ContentWrapper>
+        <PageContainer>
             <Title>Overview</Title>
             <Subtitle>Comprehensive contract management and AI insights</Subtitle>
 
-            <Dashboard metrics={kpiMetrics}/>
+            <Dashboard metrics={KPI_METRICS}/>
 
             <ChartGrid>
                 <ContractStatusOverview items={contracts?.responseList || []}/>
                 <ContractsByIndustry/>
             </ChartGrid>
-        </ContentWrapper>
+        </PageContainer>
     );
 };
 
