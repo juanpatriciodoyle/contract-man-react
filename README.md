@@ -1,5 +1,6 @@
 # ContractFlow: AI-Powered Contract Management
-
+![Days](https://img.shields.io/static/v1?label=Working-Days&message=3&color=blue)
+![Status](https://img.shields.io/static/v1?label=Done-Status&message=60%&color=yellow)
 ![ContractFlow Application Screenshot](public/screenshot.png)
 ## 🚀 Overview
 
@@ -27,11 +28,9 @@ ContractFlow is a cutting-edge, AI-powered contract management system designed t
 * **Animation**: Framer Motion
 * **Routing**: React Router DOM
 * **API Integration**: Custom React Hooks utilizing the `fetch` API for secure token-based communication.
-* **State Management**: React Hooks (`useState`, `useEffect`, `useRef`).
 * **Reusable UI**: Custom-built UI components including responsive tables, versatile KPI cards, and interactive progress indicators.
 * **Data Export**: `jspdf`, `xlsx`, `file-saver` for exporting reports in various formats.
-* **Icons**: Lucide React for crisp, scalable vector icons.
-* **Build Tool**: Create React App for a robust development environment.
+* **Icons**: [Lucide React](https://lucide.dev/) for crisp, scalable vector icons.
 
 ## ⚙️ Getting Started
 
@@ -86,6 +85,5 @@ Switch to the "Admin" view using the user profile toggle at the top of the sideb
 ### Vendor Portal
 Toggle to the "Vendor" view in the sidebar to access the vendor-specific dashboard. Here, you can monitor the status of your document verifications, submit new contracts, and utilize quick action shortcuts.
 
-## 📁 Project Structure
 
-The project follows a modular and component-driven architecture:
+Coded with ❤️ by Juan Patricio Doyle ✨2025
