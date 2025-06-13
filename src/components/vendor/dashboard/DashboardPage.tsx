@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
 import {Subtitle, Title} from '../../ui/text';
@@ -250,6 +250,14 @@ const RECENT_CONTRACTS_COLUMNS: TableColumn<RecentContract>[] = [
 ];
 
 const VendorDashboardPage: React.FC = () => {
+    const [currentDate, setCurrentDate] = useState('');
+
+    useEffect(() => {
+        const today = new Date();
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        setCurrentDate(today.toLocaleDateString('en-US', options));
+    }, []);
+
     return (
         <PageWrapper>
             <Title>Vendor Dashboard</Title>
@@ -308,7 +316,7 @@ const VendorDashboardPage: React.FC = () => {
                         </VerificationStatusItem>
                         <p style={{fontSize: '0.875rem', color: '#6b7280', marginTop: '1rem', textAlign: 'center'}}>
                             Fully verified vendor <br/>
-                            <span style={{fontSize: '0.75rem'}}>last updated: Nov 19, 2024</span>
+                            <span style={{ fontSize: '0.75rem' }}>last updated: {currentDate}</span>
                         </p>
                     </CardWrapper>
 
