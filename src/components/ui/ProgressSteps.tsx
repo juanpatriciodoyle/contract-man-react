@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CheckCircle, LucideIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Step {
     id: number;
@@ -55,14 +56,14 @@ const StepItem = styled.div<{ $active: boolean; $completed: boolean }>`
     width: 120px;
 `;
 
-const StepCircle = styled.div<{ $active: boolean; $completed: boolean }>`
+const StepCircle = styled(motion.div)<{ $active: boolean; $completed: boolean }>`
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background-color: ${({ $active, $completed }) =>
-    $completed ? '#4f46e5' : $active ? '#4f46e5' : '#e5e7eb'};
+            $completed ? '#4f46e5' : $active ? '#4f46e5' : '#e5e7eb'};
     color: ${({ $active, $completed }) =>
-    $active || $completed ? '#ffffff' : '#9ca3af'};
+            $active || $completed ? '#ffffff' : '#9ca3af'};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,7 +79,7 @@ const StepLabel = styled.p<{ $active: boolean; $completed: boolean }>`
     font-size: 0.875rem;
     font-weight: 500;
     color: ${({ $active, $completed }) =>
-    $completed ? '#4f46e5' : $active ? '#4f46e5' : '#6b7280'};
+            $completed ? '#4f46e5' : $active ? '#4f46e5' : '#6b7280'};
     word-wrap: break-word;
 `;
 
@@ -94,7 +95,14 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps, currentStepId }) =
                     return (
                         <React.Fragment key={step.id}>
                             <StepItem $active={isActive} $completed={isCompleted}>
-                                <StepCircle $active={isActive} $completed={isCompleted}>
+                                <StepCircle
+                                    $active={isActive}
+                                    $completed={isCompleted}
+                                    initial={{ scale: 0.8, opacity: 0.5 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    whileHover={{ scale: 1.1 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                                >
                                     {isCompleted ? <CheckCircle size={20} /> : <IconComponent size={20} />}
                                 </StepCircle>
                                 <StepLabel $active={isActive} $completed={isCompleted}>
@@ -102,7 +110,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps, currentStepId }) =
                                 </StepLabel>
                             </StepItem>
                             {index < steps.length - 1 && (
-                                <ConnectingLine $isActiveSegment={step.id < currentStepId || step.id === currentStepId} />
+                                <ConnectingLine $isActiveSegment={step.id <= currentStepId} />
                             )}
                         </React.Fragment>
                     );
