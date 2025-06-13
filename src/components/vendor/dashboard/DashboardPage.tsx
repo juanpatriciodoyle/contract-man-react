@@ -239,10 +239,11 @@ const RECENT_CONTRACTS_COLUMNS: TableColumn<RecentContract>[] = [
         label: 'Actions',
         renderCell: (item: RecentContract) => (
             <ActionIcons>
-                <ActionButton onClick={() => console.log('View contract:', item.id)}><Eye size={16}/></ActionButton>
-                <ActionButton onClick={() => console.log('Edit contract:', item.id)}><Edit size={16}/></ActionButton>
-                <ActionButton onClick={() => console.log('Delete contract:', item.id)}><Trash2
-                    size={16}/></ActionButton>
+                <ActionButton><Eye size={16}/></ActionButton>
+                <ActionButton><Edit size={16}/></ActionButton>
+                <ActionButton>
+                    <Trash2 size={16}/>
+                </ActionButton>
             </ActionIcons>
         ),
     },
