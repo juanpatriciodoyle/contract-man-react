@@ -188,7 +188,8 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
     ];
 
     const VENDOR_MENU_ITEMS: MenuItem[] = [
-        {to: "/vendor-dashboard", icon: UploadCloud, label: "Verification Status"},
+        {to: "/vendor-dashboard", icon: LayoutDashboard, label: "Dashboard"},
+        {to: "/verification-status", icon: UploadCloud, label: "Verification Status"},
     ];
 
     const MENU_ITEMS = activeProfile === 'admin' ? ADMIN_MENU_ITEMS : VENDOR_MENU_ITEMS;

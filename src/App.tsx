@@ -12,17 +12,18 @@ import VendorPortalPage from "./components/admin/vendor/VendorPortalPage";
 import AIAnalyticsDashboard from './components/admin/analytics/AIAnalyticsDashboard';
 import ReportsPage from './components/admin/reports/ReportsPage';
 import VerificationStatusPage from './components/vendor/verification/VerificationStatusPage';
+import DashboardPage from "./components/vendor/dashboard/DashboardPage";
 
-const APP_WRAPPER = styled.div`
+const AppWrapper = styled.div`
     display: flex;
     flex-direction: row;
 `;
 
-const APP_LAYOUT: React.FC<{ contractCount: number }> = ({contractCount}) => (
-    <APP_WRAPPER>
+const AppLayout: React.FC<{ contractCount: number }> = ({contractCount}) => (
+    <AppWrapper>
         <Sidebar contractCount={contractCount}/>
         <Outlet/>
-    </APP_WRAPPER>
+    </AppWrapper>
 );
 
 const App = () => {
@@ -36,7 +37,7 @@ const App = () => {
         <BrowserRouter>
             <GlobalStyle/>
             <Routes>
-                <Route element={<APP_LAYOUT contractCount={contractCount}/>}>
+                <Route element={<AppLayout contractCount={contractCount}/>}>
                     <Route
                         path="/"
                         element={<MainContent contracts={contracts}/>}
@@ -65,7 +66,11 @@ const App = () => {
                     />
                     <Route
                         path="/vendor-dashboard"
-                        element={<VerificationStatusPage />}
+                        element={<DashboardPage />}
+                    />
+                    <Route
+                        path="/verification-status"
+                        element={<VerificationStatusPage />} // Updated component reference
                     />
                 </Route>
                 <Route path="/contract/:contractId" element={<ContractDetail/>}/>
