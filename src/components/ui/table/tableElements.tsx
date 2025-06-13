@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
-export const ActionButton = styled.button`
+export const ActionButton = styled.button<{ $color?: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,7 +16,7 @@ export const ActionButton = styled.button`
     transition: all 0.2s ease-in-out;
 
     &:hover {
-        color: #3b82f6;
+        color: ${({ $color }) => $color ? $color : '#3b82f6'};
         background-color: #e5e7eb;
     }
 `;
@@ -66,7 +66,7 @@ export const ScoreBar = styled.div`
 `;
 
 export const ScoreFill = styled.div<{ $score: number }>`
-    width: ${({ $score }) => $score}%; // Use $score
+    width: ${({ $score }) => $score}%;
     height: 100%;
     background-color: #4f46e5;
     border-radius: 4px;

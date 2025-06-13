@@ -130,8 +130,8 @@ const ContractManager: React.FC<ContractManagerProps> = ({items, mockData}) => {
                 return (
                     <ActionIcons>
                         <ActionButton onClick={handleViewClick}><Eye size={16}/></ActionButton>
-                        <ActionButton><Edit size={16}/></ActionButton>
-                        <ActionButton><Trash2 size={16}/></ActionButton>
+                        <ActionButton $color={"#c0b500"}><Edit size={16}/></ActionButton>
+                        <ActionButton $color={"#ff0000"}><Trash2 size={16}/></ActionButton>
                     </ActionIcons>
                 );
             },
