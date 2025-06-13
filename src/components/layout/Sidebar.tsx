@@ -211,7 +211,7 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
             <LogoWrapper>
                 <LogoIcon><Bot size={24}/></LogoIcon>
                 <div>
-                    <AppTitle>ContractFlow</AppTitle>
+                    <AppTitle>Domino Contracts</AppTitle>
                     <AppSubtitle>AI-Powered Management</AppSubtitle>
                 </div>
             </LogoWrapper>
