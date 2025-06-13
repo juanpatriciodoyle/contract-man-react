@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import {Subtitle, Title} from '../../ui/text';
 import {CloudUpload, Scan, ShieldCheck, ClipboardCheck, CheckCircle} from 'lucide-react';
-import ProgressSteps from '../../ui/ProgressSteps';
+import ProgressSteps from '../../ui/progressSteps';
 
 const PageWrapper = styled.div`
     flex-grow: 1;

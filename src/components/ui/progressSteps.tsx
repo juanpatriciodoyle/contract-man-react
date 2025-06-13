@@ -51,7 +51,8 @@ const StepItem = styled.div<{ $active: boolean; $completed: boolean }>`
     position: relative;
     z-index: 1;
     flex-shrink: 0;
-    cursor: pointer;
+    cursor: ${({ $active, $completed }) => ($active || $completed ? 'pointer' : 'default')};
+    pointer-events: ${({ $active, $completed }) => ($active || $completed ? 'auto' : 'none')};
     text-align: center;
     width: 120px;
 `;
