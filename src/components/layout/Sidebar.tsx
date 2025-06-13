@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, LucideIcon, UploadCloud, Users} from 'lucide-react';
+import {BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, LucideIcon, UserCheck, Users} from 'lucide-react';
 import {motion} from 'framer-motion';
 
 const SidebarWrapper = styled.div`
@@ -189,7 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
 
     const VENDOR_MENU_ITEMS: MenuItem[] = [
         {to: "/vendor-dashboard", icon: LayoutDashboard, label: "Dashboard"},
-        {to: "/verification-status", icon: UploadCloud, label: "Verification Status"},
+        {to: "/verification-status", icon: UserCheck, label: "Verification Status"},
     ];
 
     const MENU_ITEMS = activeProfile === 'admin' ? ADMIN_MENU_ITEMS : VENDOR_MENU_ITEMS;
