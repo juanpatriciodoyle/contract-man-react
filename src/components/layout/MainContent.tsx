@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import styled from 'styled-components';
 import {ApiResponse} from '../../hooks/useGetContracts';
-import Dashboard from '../admin/dashboard/Dashboard';
+import AdminDashboard from '../admin/dashboard/AdminDashboard';
 import ContractStatusOverview from '../admin/dashboard/ContractStatusOverview';
 import ContractsByIndustry from '../admin/dashboard/ContractsByIndustry';
 import {formatValue, parseValue} from '../utils';
@@ -68,7 +68,7 @@ const MainContent: React.FC<MainContentProps> = ({contracts}) => {
             <Title>Overview</Title>
             <Subtitle>Comprehensive contract management and AI insights</Subtitle>
 
-            <Dashboard metrics={KPI_METRICS}/>
+            <AdminDashboard metrics={KPI_METRICS}/>
 
             <ChartGrid>
                 <ContractStatusOverview items={contracts?.responseList || []}/>

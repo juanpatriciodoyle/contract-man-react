@@ -12,7 +12,7 @@ import VendorPortalPage from "./components/admin/vendor/VendorPortalPage";
 import AIAnalyticsDashboard from './components/admin/analytics/AIAnalyticsDashboard';
 import ReportsPage from './components/admin/reports/ReportsPage';
 import VerificationStatusPage from './components/vendor/verification/VerificationStatusPage';
-import DashboardPage from "./components/vendor/dashboard/DashboardPage";
+import DashboardPage from "./components/vendor/dashboard/VendorDashboard";
 
 const AppWrapper = styled.div`
     display: flex;

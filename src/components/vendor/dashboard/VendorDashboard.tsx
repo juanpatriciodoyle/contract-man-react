@@ -216,6 +216,24 @@ const RECENT_CONTRACTS_COLUMNS: TableColumn<RecentContract>[] = [
     },
 ];
 
+const ITEM_VARIANTS = {
+    hidden: {y: 20, opacity: 0},
+    visible: {
+        y: 0,
+        opacity: 1,
+    }
+};
+
+const CONTAINER_VARIANTS = {
+    hidden: {opacity: 0},
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+        }
+    }
+};
+
 const VendorDashboardPage: React.FC = () => {
     const [currentDate, setCurrentDate] = useState('');
 
@@ -230,9 +248,13 @@ const VendorDashboardPage: React.FC = () => {
             <Title>Overview</Title>
             <Subtitle>Track your contract submissions and business performance</Subtitle>
 
-            <KpiGrid>
+            <KpiGrid
+                variants={CONTAINER_VARIANTS}
+                initial="hidden"
+                animate="visible"
+            >
                 {VENDOR_DASHBOARD_KPI_DATA.map((card) => (
-                    <motion.div key={card.title}>
+                    <motion.div key={card.title} variants={ITEM_VARIANTS}>
                         <KPICard
                             title={card.title}
                             value={card.value}

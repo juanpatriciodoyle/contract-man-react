@@ -52,7 +52,7 @@ const ITEM_VARIANTS = {
     }
 };
 
-const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
+const AdminDashboard: React.FC<DashboardProps> = ({metrics}) => {
     const DASHBOARD_KPI_DATA = [
         {
             title: "AVG. PROCESSING TIME",
@@ -110,4 +110,4 @@ const Dashboard: React.FC<DashboardProps> = ({metrics}) => {
     );
 };
 
-export default Dashboard;
+export default AdminDashboard;
