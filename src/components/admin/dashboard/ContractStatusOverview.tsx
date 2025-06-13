@@ -2,6 +2,10 @@ import React, { useMemo } from 'react';
 import { ResponseItem } from '../../../hooks/useGetContracts';
 import StatusProgressBarChart from '../../ui/statusProgressBarChart';
 import { CardLayout } from '../../ui/CardLayout';
+import {SectionHeader} from "../../ui/text";
+import {LineChart} from "lucide-react";
+import styled from "styled-components";
+import {motion} from "framer-motion";
 
 interface OverviewProps {
     items: ResponseItem[];
@@ -13,6 +17,14 @@ const STATUS_COLORS_DATA = [
     { name: 'Need More Information', color: '#F97316' },
     { name: 'Rejected', color: '#EF4444' },
 ];
+
+const ChartWrapper = styled.div`
+    font-size: 17px;
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+    align-items: center;
+`;
 
 const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
     const statusCounts = useMemo(() => {
@@ -39,8 +51,9 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
         color: statusInfo.color,
     }));
 
+
     return (
-        <CardLayout>
+        <ChartWrapper>
             <StatusProgressBarChart
                 title="Contract Status Overview"
                 data={CHART_DATA}
@@ -49,7 +62,7 @@ const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
                 showLeftIcon={false}
                 fontScale={1}
             />
-        </CardLayout>
+        </ChartWrapper>
     );
 };
 
