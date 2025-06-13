@@ -262,7 +262,7 @@ const VendorDashboardPage: React.FC = () => {
                 </CardLayout>
 
                 <div>
-                    <CardLayout $marginBottom="2.5rem">
+                    <CardLayout>
                         <SectionHeader>Verification Status</SectionHeader>
                         <VerificationStatusItem>
                             <span>Account Status</span>
