@@ -6,6 +6,11 @@
 
 ContractFlow is a cutting-edge, AI-powered contract management system designed to revolutionize how businesses handle their contracts. It offers a seamless, automated workflow for both administrators and vendors, providing intelligent insights, efficient document processing, and robust compliance assurance throughout the entire contract lifecycle.
 
+**TODO:**
+1. Contract CRUD
+2. Use Headless CMS
+3. More things from Foundry aside the Contract Domino app (AI, new feature)
+
 ## ✨ Key Features
 
 ### Admin Portal Capabilities:
