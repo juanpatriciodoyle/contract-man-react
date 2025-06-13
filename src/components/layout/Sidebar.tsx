@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {NavLink} from 'react-router-dom';
-import {BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, Users} from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import { BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, Users, LucideIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const SidebarWrapper = styled.div`
     width: 300px;
     background-color: #ffffff;
     border-right: 1px solid #e5e7eb;
-    padding: 1.5rem;
+    padding: 1.3rem;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -18,7 +19,7 @@ const LogoWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 0.5rem;
+    padding: 0 0.5rem 0.5rem;
 `;
 
 const LogoIcon = styled.div`
@@ -108,15 +109,92 @@ const NotificationBadge = styled.span`
 
 const SeparatorLine = styled.div`
     border-bottom: 1px solid #e5e7eb;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     width: 100%;
+`;
+
+const UserSwitchContainer = styled.div`
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+`;
+
+const UserSwitchButton = styled.button<{ $isActive: boolean }>`
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.4rem;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: ${({$isActive}) => ($isActive ? '#ffffff' : '#4b5563')};
+    transition: color 0.2s ease-in-out;
+    font-size: 0.875rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+`;
+
+const ActiveSwitchBackground = styled(motion.div)`
+    position: absolute;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    border-radius: 0.4rem;
+    background-image: linear-gradient(to right, #4f46e5, #6366f1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 0;
 `;
 
 interface SidebarProps {
     contractCount: number;
 }
 
+type UserProfile = 'admin' | 'vendor';
+
+interface MenuItem {
+    to: string;
+    icon: LucideIcon;
+    label: string;
+    notification?: number;
+}
+
 const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
+    const [activeProfile, setActiveProfile] = useState<UserProfile>('admin');
+    const [buttonWidth, setButtonWidth] = useState(0);
+
+    React.useEffect(() => {
+        const calculateWidth = () => {
+            const container = document.getElementById('user-switch-container');
+            if (container) {
+                setButtonWidth((container.offsetWidth - 0.5 * 16 - 0.25 * 16 * 2) / 2);
+            }
+        };
+        calculateWidth();
+        window.addEventListener('resize', calculateWidth);
+        return () => window.removeEventListener('resize', calculateWidth);
+    }, []);
+
+    const ADMIN_MENU_ITEMS: MenuItem[] = [
+        { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+        { to: "/contracts", icon: FileText, label: "Contracts", notification: contractCount },
+        { to: "/ai-analytics", icon: BarChart2, label: "AI Analytics" },
+        { to: "/admin-vendors", icon: Users, label: "Vendors" },
+        { to: "/reports", icon: FileBarChart, label: "Reports" },
+    ];
+
+    const VENDOR_MENU_ITEMS: MenuItem[] = [
+        { to: "/vendor-dashboard", icon: LayoutDashboard, label: "Verification Status" },
+    ];
+
+    const MENU_ITEMS = activeProfile === 'admin' ? ADMIN_MENU_ITEMS : VENDOR_MENU_ITEMS;
+
+    const switchX = activeProfile === 'admin' ? 0 : buttonWidth + 0.8 * 16;
+
     return (
         <SidebarWrapper>
             <LogoWrapper>
@@ -126,39 +204,43 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
                     <AppSubtitle>AI-Powered Management</AppSubtitle>
                 </div>
             </LogoWrapper>
+
             <SeparatorLine/>
+
+            <UserSwitchContainer id="user-switch-container">
+                {buttonWidth > 0 && (
+                    <ActiveSwitchBackground
+                        initial={{ x: switchX, width: buttonWidth }}
+                        animate={{ x: switchX, width: buttonWidth }}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                )}
+                <UserSwitchButton
+                    $isActive={activeProfile === 'admin'}
+                    onClick={() => setActiveProfile('admin')}
+                >
+                    Admin
+                </UserSwitchButton>
+                <UserSwitchButton
+                    $isActive={activeProfile === 'vendor'}
+                    onClick={() => setActiveProfile('vendor')}
+                >
+                    Vendor
+                </UserSwitchButton>
+            </UserSwitchContainer>
+
+            <SeparatorLine/>
+
             <NavList>
-                <StyledNavLink to="/">
-                    <LinkContent>
-                        <LayoutDashboard size={20}/>
-                        Dashboard
-                    </LinkContent>
-                </StyledNavLink>
-                <StyledNavLink to="/contracts">
-                    <LinkContent>
-                        <FileText size={20}/>
-                        Contracts
-                    </LinkContent>
-                    {contractCount > 0 && <NotificationBadge>{contractCount}</NotificationBadge>}
-                </StyledNavLink>
-                <StyledNavLink to="/ai-analytics">
-                    <LinkContent>
-                        <BarChart2 size={20}/>
-                        AI Analytics
-                    </LinkContent>
-                </StyledNavLink>
-                <StyledNavLink to="/admin-vendors">
-                    <LinkContent>
-                        <Users size={20}/>
-                        Vendors
-                    </LinkContent>
-                </StyledNavLink>
-                <StyledNavLink to="/reports">
-                    <LinkContent>
-                        <FileBarChart size={20}/>
-                        Reports
-                    </LinkContent>
-                </StyledNavLink>
+                {MENU_ITEMS.map((item) => (
+                    <StyledNavLink key={item.to} to={item.to}>
+                        <LinkContent>
+                            <item.icon size={20}/>
+                            {item.label}
+                        </LinkContent>
+                        {item.notification && item.notification > 0 && <NotificationBadge>{item.notification}</NotificationBadge>}
+                    </StyledNavLink>
+                ))}
             </NavList>
         </SidebarWrapper>
     );
