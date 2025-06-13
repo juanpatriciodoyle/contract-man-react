@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import {Subtitle, Title} from '../../ui/text';
-import {CheckCircle, ClipboardCheck, CloudUpload, Scan, ShieldCheck} from 'lucide-react';
-import ProgressSteps from '../../ui/ProgressSteps'; // Import the new component
+import {CloudUpload, Scan, ShieldCheck, ClipboardCheck, CheckCircle} from 'lucide-react';
+import ProgressSteps from '../../ui/ProgressSteps';
 
 const PageWrapper = styled.div`
     flex-grow: 1;
@@ -47,6 +47,13 @@ const UploadText = styled.p`
     margin: 0;
 `;
 
+const ChosenFileName = styled.p`
+    font-weight: 600;
+    color: #4f46e5;
+    margin: 0.5rem 0 0;
+`;
+
+
 const ChooseFileButton = styled.button`
     background-color: #4f46e5;
     color: #ffffff;
@@ -76,15 +83,37 @@ const VERIFICATION_STEPS = [
     {id: 5, label: 'Complete', icon: CheckCircle},
 ];
 
+const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
+const SUPPORTED_FORMATS_TEXT = 'Supported formats: PDF, JPG, JPEG, PNG (Max 10MB)';
+
+
 const VerificationStatusPage: React.FC = () => {
     const CURRENT_STEP = 1;
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const handleChooseFileClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            if (ALLOWED_FILE_TYPES.includes(file.type) && file.size <= 10 * 1024 * 1024) {
+                setSelectedFile(file);
+            } else {
+                setSelectedFile(null);
+                alert('Invalid file type or size. Please upload a PDF, JPG, JPEG, or PNG file up to 10MB.');
+            }
+        }
+    };
 
     return (
         <PageWrapper>
             <Title>Verification Status</Title>
             <Subtitle>Upload and process your contract with AI-powered analysis</Subtitle>
 
-            <ProgressSteps steps={VERIFICATION_STEPS} currentStepId={CURRENT_STEP}/>
+            <ProgressSteps steps={VERIFICATION_STEPS} currentStepId={CURRENT_STEP} />
 
             <UploadSection>
                 <h3 style={{fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '1.5rem'}}>
@@ -92,11 +121,22 @@ const VerificationStatusPage: React.FC = () => {
                 </h3>
                 <DropArea>
                     <UploadIcon size={48}/>
-                    <UploadText>Drag and drop your contract or click to browse</UploadText>
-                    <ChooseFileButton>Choose File</ChooseFileButton>
+                    {selectedFile ? (
+                        <ChosenFileName>{selectedFile.name}</ChosenFileName>
+                    ) : (
+                        <UploadText>Drag and drop your contract or click to browse</UploadText>
+                    )}
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        style={{ display: 'none' }}
+                    />
+                    <ChooseFileButton onClick={handleChooseFileClick}>Choose File</ChooseFileButton>
                 </DropArea>
                 <SupportedFormats>
-                    Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
+                    {SUPPORTED_FORMATS_TEXT}
                 </SupportedFormats>
             </UploadSection>
         </PageWrapper>
