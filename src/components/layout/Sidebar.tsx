@@ -121,7 +121,6 @@ const UserSwitchContainer = styled.div`
     border-radius: 0.5rem;
     padding: 0.25rem;
     gap: 0.8rem;
-    margin-bottom: 1.5rem;
 `;
 
 const UserSwitchButton = styled.button<{ $isActive: boolean }>`
