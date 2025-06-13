@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import {Subtitle, Title} from '../../ui/text';
 import {CheckCircle, CloudUpload} from 'lucide-react';
 
-const PAGE_WRAPPER = styled.div`
+const PageWrapper = styled.div`
     flex-grow: 1;
     padding: 2rem 2rem;
     height: 100vh;
     overflow-y: auto;
 `;
 
-const PROGRESS_CONTAINER = styled.div`
+const ProgressContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -31,7 +31,7 @@ const PROGRESS_CONTAINER = styled.div`
     }
 `;
 
-const STEP_CONTAINER = styled.div<{ $active: boolean; $completed: boolean }>`
+const StepContainer = styled.div<{ $active: boolean; $completed: boolean }>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@ const STEP_CONTAINER = styled.div<{ $active: boolean; $completed: boolean }>`
     cursor: pointer;
 `;
 
-const STEP_CIRCLE = styled.div<{ $active: boolean; $completed: boolean }>`
+const StepCircle = styled.div<{ $active: boolean; $completed: boolean }>`
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -56,7 +56,7 @@ const STEP_CIRCLE = styled.div<{ $active: boolean; $completed: boolean }>`
     transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
-const STEP_LABEL = styled.p<{ $active: boolean; $completed: boolean }>`
+const StepLabel = styled.p<{ $active: boolean; $completed: boolean }>`
     margin-top: 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
@@ -67,7 +67,7 @@ const STEP_LABEL = styled.p<{ $active: boolean; $completed: boolean }>`
     word-wrap: break-word;
 `;
 
-const UPLOAD_SECTION = styled.div`
+const UploadSection = styled.div`
     background-color: #ffffff;
     border-radius: 0.75rem;
     padding: 2.5rem;
@@ -79,7 +79,7 @@ const UPLOAD_SECTION = styled.div`
     justify-content: center;
 `;
 
-const DROP_AREA = styled.div`
+const DropArea = styled.div`
     border: 2px dashed #d1d5db;
     border-radius: 0.5rem;
     padding: 3rem 2rem;
@@ -93,17 +93,17 @@ const DROP_AREA = styled.div`
     gap: 1rem;
 `;
 
-const UPLOAD_ICON = styled(CloudUpload)`
+const UploadIcon = styled(CloudUpload)`
     color: #9ca3af;
 `;
 
-const UPLOAD_TEXT = styled.p`
+const UploadText = styled.p`
     font-weight: 500;
     color: #4b5563;
     margin: 0;
 `;
 
-const CHOOSE_FILE_BUTTON = styled.button`
+const ChooseFileButton = styled.button`
     background-color: #4f46e5;
     color: #ffffff;
     padding: 0.75rem 1.5rem;
@@ -118,7 +118,7 @@ const CHOOSE_FILE_BUTTON = styled.button`
     }
 `;
 
-const SUPPORTED_FORMATS = styled.p`
+const SupportedFormats = styled.p`
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 1.5rem;
@@ -136,47 +136,47 @@ const VerificationStatusPage: React.FC = () => {
     const CURRENT_STEP = 1;
 
     return (
-        <PAGE_WRAPPER>
+        <PageWrapper>
             <Title>Verification Status</Title>
             <Subtitle>Upload and process your contract with AI-powered analysis</Subtitle>
 
-            <PROGRESS_CONTAINER>
-                {VERIFICATION_STEPS.map((step, index) => (
-                    <STEP_CONTAINER
+            <ProgressContainer>
+                {VERIFICATION_STEPS.map((step) => (
+                    <StepContainer
                         key={step.id}
                         $active={step.id === CURRENT_STEP}
                         $completed={step.id < CURRENT_STEP}
                     >
-                        <STEP_CIRCLE
+                        <StepCircle
                             $active={step.id === CURRENT_STEP}
                             $completed={step.id < CURRENT_STEP}
                         >
                             {step.id < CURRENT_STEP ? <CheckCircle size={20}/> : step.id}
-                        </STEP_CIRCLE>
-                        <STEP_LABEL
+                        </StepCircle>
+                        <StepLabel
                             $active={step.id === CURRENT_STEP}
                             $completed={step.id < CURRENT_STEP}
                         >
                             {step.label}
-                        </STEP_LABEL>
-                    </STEP_CONTAINER>
+                        </StepLabel>
+                    </StepContainer>
                 ))}
-            </PROGRESS_CONTAINER>
+            </ProgressContainer>
 
-            <UPLOAD_SECTION>
+            <UploadSection>
                 <h3 style={{fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '1.5rem'}}>
                     Upload Contract Document
                 </h3>
-                <DROP_AREA>
-                    <UPLOAD_ICON size={48}/>
-                    <UPLOAD_TEXT>Drag and drop your contract or click to browse</UPLOAD_TEXT>
-                    <CHOOSE_FILE_BUTTON>Choose File</CHOOSE_FILE_BUTTON>
-                </DROP_AREA>
-                <SUPPORTED_FORMATS>
+                <DropArea>
+                    <UploadIcon size={48}/>
+                    <UploadText>Drag and drop your contract or click to browse</UploadText>
+                    <ChooseFileButton>Choose File</ChooseFileButton>
+                </DropArea>
+                <SupportedFormats>
                     Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
-                </SUPPORTED_FORMATS>
-            </UPLOAD_SECTION>
-        </PAGE_WRAPPER>
+                </SupportedFormats>
+            </UploadSection>
+        </PageWrapper>
     );
 };
 
