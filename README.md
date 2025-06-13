@@ -1,7 +1,7 @@
 # ContractFlow: AI-Powered Contract Management
 ![Days](https://img.shields.io/static/v1?label=Working-Days&message=3&color=blue)
 ![Status](https://img.shields.io/static/v1?label=Done-Status&message=60%&color=yellow)
-![ContractFlow Application Screenshot](public/screenshot.png)
+![ContractFlow Application Screenshot](public/gif-test.gif)
 ## 🚀 Overview
 
 ContractFlow is a cutting-edge, AI-powered contract management system designed to revolutionize how businesses handle their contracts. It offers a seamless, automated workflow for both administrators and vendors, providing intelligent insights, efficient document processing, and robust compliance assurance throughout the entire contract lifecycle.
