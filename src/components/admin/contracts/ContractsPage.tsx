@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ContractManager from './ContractManager';
-import {ApiResponse} from '../../hooks/useGetContracts';
+import {ApiResponse} from '../../../hooks/useGetContracts';
 
 const PageWrapper = styled.div`
     padding: 2rem 2rem;

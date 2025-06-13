@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { ResponseItem } from '../../hooks/useGetContracts';
-import StatusProgressBarChart from '../ui/statusProgressBarChart';
+import { ResponseItem } from '../../../hooks/useGetContracts';
+import StatusProgressBarChart from '../../ui/statusProgressBarChart';
 
 interface OverviewProps {
     items: ResponseItem[];

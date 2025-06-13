@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useLocation, Link } from 'react-router-dom';
-import { ResponseItem } from '../../hooks/useGetContracts';
+import { ResponseItem } from '../../../hooks/useGetContracts';
 import { ArrowLeft } from 'lucide-react';
 
 const DetailWrapper = styled.div`

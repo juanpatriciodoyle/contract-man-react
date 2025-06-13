@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import {motion} from 'framer-motion';
 import {Activity, AlertTriangle, Brain, CheckCircle, Clock, FileText, LineChart, Target, Zap} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
-import {Subtitle, Title} from '../ui/text';
-import {Chip} from '../ui/chip';
-import StatusProgressBarChart from '../ui/statusProgressBarChart';
+import {Subtitle, Title} from '../../ui/text';
+import {Chip} from '../../ui/chip';
+import StatusProgressBarChart from '../../ui/statusProgressBarChart';
 
 
 const PageWrapper = styled.div`

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import { BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, Users, LucideIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
+import {NavLink, useNavigate} from 'react-router-dom';
+import {BarChart2, Bot, FileBarChart, FileText, LayoutDashboard, LucideIcon, UploadCloud, Users} from 'lucide-react';
+import {motion} from 'framer-motion';
 
 const SidebarWrapper = styled.div`
     width: 300px;
@@ -165,6 +165,7 @@ interface MenuItem {
 const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
     const [activeProfile, setActiveProfile] = useState<UserProfile>('admin');
     const [buttonWidth, setButtonWidth] = useState(0);
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         const calculateWidth = () => {
@@ -179,20 +180,30 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
     }, []);
 
     const ADMIN_MENU_ITEMS: MenuItem[] = [
-        { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-        { to: "/contracts", icon: FileText, label: "Contracts", notification: contractCount },
-        { to: "/ai-analytics", icon: BarChart2, label: "AI Analytics" },
-        { to: "/admin-vendors", icon: Users, label: "Vendors" },
-        { to: "/reports", icon: FileBarChart, label: "Reports" },
+        {to: "/", icon: LayoutDashboard, label: "Dashboard"},
+        {to: "/contracts", icon: FileText, label: "Contracts", notification: contractCount},
+        {to: "/ai-analytics", icon: BarChart2, label: "AI Analytics"},
+        {to: "/admin-vendors", icon: Users, label: "Vendors"},
+        {to: "/reports", icon: FileBarChart, label: "Reports"},
     ];
 
     const VENDOR_MENU_ITEMS: MenuItem[] = [
-        { to: "/vendor-dashboard", icon: LayoutDashboard, label: "Verification Status" },
+        {to: "/vendor-dashboard", icon: UploadCloud, label: "Verification Status"},
     ];
 
     const MENU_ITEMS = activeProfile === 'admin' ? ADMIN_MENU_ITEMS : VENDOR_MENU_ITEMS;
 
-    const switchX = activeProfile === 'admin' ? 0 : buttonWidth + 0.8 * 16;
+    const SWITCH_X = activeProfile === 'admin' ? 0 : buttonWidth + 0.8 * 16;
+
+    const handleAdminClick = () => {
+        setActiveProfile('admin');
+        navigate('/');
+    };
+
+    const handleVendorClick = () => {
+        setActiveProfile('vendor');
+        navigate('/vendor-dashboard');
+    };
 
     return (
         <SidebarWrapper>
@@ -209,20 +220,20 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
             <UserSwitchContainer id="user-switch-container">
                 {buttonWidth > 0 && (
                     <ActiveSwitchBackground
-                        initial={{ x: switchX, width: buttonWidth }}
-                        animate={{ x: switchX, width: buttonWidth }}
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        initial={{x: SWITCH_X, width: buttonWidth}}
+                        animate={{x: SWITCH_X, width: buttonWidth}}
+                        transition={{type: "spring", stiffness: 400, damping: 30}}
                     />
                 )}
                 <UserSwitchButton
                     $isActive={activeProfile === 'admin'}
-                    onClick={() => setActiveProfile('admin')}
+                    onClick={handleAdminClick}
                 >
                     Admin
                 </UserSwitchButton>
                 <UserSwitchButton
                     $isActive={activeProfile === 'vendor'}
-                    onClick={() => setActiveProfile('vendor')}
+                    onClick={handleVendorClick}
                 >
                     Vendor
                 </UserSwitchButton>
@@ -237,7 +248,8 @@ const Sidebar: React.FC<SidebarProps> = ({contractCount}) => {
                             <item.icon size={20}/>
                             {item.label}
                         </LinkContent>
-                        {item.notification && item.notification > 0 && <NotificationBadge>{item.notification}</NotificationBadge>}
+                        {item.notification && item.notification > 0 &&
+                            <NotificationBadge>{item.notification}</NotificationBadge>}
                     </StyledNavLink>
                 ))}
             </NavList>

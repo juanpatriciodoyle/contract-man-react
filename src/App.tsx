@@ -4,24 +4,25 @@ import {BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
 import {GlobalStyle} from './styles/GlobalStyle';
 import Sidebar from './components/layout/Sidebar';
 import MainContent from './components/layout/MainContent';
-import ContractDetail from './components/contracts/ContractDetail';
-import ContractsPage from './components/contracts/ContractsPage';
+import ContractDetail from './components/admin/contracts/ContractDetail';
+import ContractsPage from './components/admin/contracts/ContractsPage';
 import {useGetTokens} from './hooks/useGetTokens';
 import {useGetContracts} from './hooks/useGetContracts';
-import VendorPortalPage from "./components/vendor-admin/VendorPortalPage";
-import AIAnalyticsDashboard from './components/analytics/AIAnalyticsDashboard';
-import ReportsPage from './components/reports/ReportsPage';
+import VendorPortalPage from "./components/admin/vendor/VendorPortalPage";
+import AIAnalyticsDashboard from './components/admin/analytics/AIAnalyticsDashboard';
+import ReportsPage from './components/admin/reports/ReportsPage';
+import VerificationStatusPage from './components/vendor/verification/VerificationStatusPage';
 
-const AppWrapper = styled.div`
+const APP_WRAPPER = styled.div`
     display: flex;
     flex-direction: row;
 `;
 
-const AppLayout: React.FC<{ contractCount: number }> = ({contractCount}) => (
-    <AppWrapper>
+const APP_LAYOUT: React.FC<{ contractCount: number }> = ({contractCount}) => (
+    <APP_WRAPPER>
         <Sidebar contractCount={contractCount}/>
         <Outlet/>
-    </AppWrapper>
+    </APP_WRAPPER>
 );
 
 const App = () => {
@@ -35,7 +36,7 @@ const App = () => {
         <BrowserRouter>
             <GlobalStyle/>
             <Routes>
-                <Route element={<AppLayout contractCount={contractCount}/>}>
+                <Route element={<APP_LAYOUT contractCount={contractCount}/>}>
                     <Route
                         path="/"
                         element={<MainContent contracts={contracts}/>}
@@ -61,6 +62,10 @@ const App = () => {
                     <Route
                         path="/reports"
                         element={<ReportsPage />}
+                    />
+                    <Route
+                        path="/vendor-dashboard"
+                        element={<VerificationStatusPage />}
                     />
                 </Route>
                 <Route path="/contract/:contractId" element={<ContractDetail/>}/>

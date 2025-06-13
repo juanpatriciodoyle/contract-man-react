@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import {AlertTriangle, CheckCircle, Clock, Users} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {motion} from 'framer-motion';
-import {Subtitle, Title} from "../ui/text";
-import Table, {TableColumn} from '../ui/table/table';
-import {Chip} from '../ui/chip';
-import {ActionButton, ActionIcons} from '../ui/table/tableElements';
+import {Subtitle, Title} from "../../ui/text";
+import Table, {TableColumn} from '../../ui/table/table';
+import {Chip} from '../../ui/chip';
+import {ActionButton, ActionIcons} from '../../ui/table/tableElements';
 
 const PAGE_WRAPPER = styled.div`
     flex-grow: 1;

@@ -1,12 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import {Edit, Eye, Trash2} from 'lucide-react';
-import {ResponseItem} from '../../hooks/useGetContracts';
+import {ResponseItem} from '../../../hooks/useGetContracts';
 import {useNavigate} from 'react-router-dom';
-import {formatValue} from '../utils';
+import {formatValue} from '../../utils';
 
-import Table, {TableColumn} from '../ui/table/table';
+import Table, {TableColumn} from '../../ui/table/table';
 
-import {Chip} from '../ui/chip';
+import {Chip} from '../../ui/chip';
 
 import {
     ActionButton,
@@ -16,7 +16,7 @@ import {
     ContractTitle,
     getInitials,
     VendorCell
-} from '../ui/table/tableElements';
+} from '../../ui/table/tableElements';
 
 const STATUS_OPTIONS = ["All Status", "Pending", "Approved", "Rejected", "Needs Review", "Accepted"];
 

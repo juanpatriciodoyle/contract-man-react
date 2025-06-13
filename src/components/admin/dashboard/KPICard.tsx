@@ -1,11 +1,11 @@
 // src/components/dashboard/KPICard.tsx (Updated)
 
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { Card, CardContent } from '../ui/card';
+import { Card, CardContent } from '../../ui/card';
 import { TrendingUp, TrendingDown, AlertTriangle, LucideIcon } from 'lucide-react';
 import styled from 'styled-components';
 import React, { useEffect, useMemo } from 'react';
-import { formatValue, parseValue } from '../utils';
+import { formatValue, parseValue } from '../../utils';
 
 interface KPICardProps {
   title: string;

@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
 import styled from 'styled-components';
 import {ApiResponse} from '../../hooks/useGetContracts';
-import Dashboard from '../dashboard/Dashboard';
-import ContractStatusOverview from '../dashboard/ContractStatusOverview';
-import ContractsByIndustry from '../dashboard/ContractsByIndustry';
+import Dashboard from '../admin/dashboard/Dashboard';
+import ContractStatusOverview from '../admin/dashboard/ContractStatusOverview';
+import ContractsByIndustry from '../admin/dashboard/ContractsByIndustry';
 import {formatValue} from '../utils';
 import {Subtitle, Title} from "../ui/text";
 
