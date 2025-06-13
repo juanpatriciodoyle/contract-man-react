@@ -227,7 +227,7 @@ const VendorDashboardPage: React.FC = () => {
 
     return (
         <PageContainer>
-            <Title>Vendor Dashboard</Title>
+            <Title>Overview</Title>
             <Subtitle>Track your contract submissions and business performance</Subtitle>
 
             <KpiGrid>
