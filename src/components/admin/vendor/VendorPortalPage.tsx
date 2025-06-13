@@ -3,20 +3,20 @@ import styled from 'styled-components';
 import {AlertTriangle, CheckCircle, Clock, Users} from 'lucide-react';
 import KPICard from '../dashboard/KPICard';
 import {motion} from 'framer-motion';
-import {Subtitle, Title, SectionHeader} from "../../ui/text"; // Import SectionHeader
+import {SectionHeader, Subtitle, Title} from "../../ui/text"; // Import SectionHeader
 import Table, {TableColumn} from '../../ui/table/table';
 import {Chip} from '../../ui/chip';
 import {ActionButton, ActionIcons} from '../../ui/table/tableElements';
-import { PageContainer } from '../../layout/PageContainer';
+import {PageContainer} from '../../layout/PageContainer';
 
-const PAGE_HEADER = styled.div`
+const PageHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2.5rem;
 `;
 
-const REGISTER_BUTTON = styled.button`
+const RegisterButton = styled.button`
     background-color: #4f46e5;
     color: #ffffff;
     padding: 0.75rem 1.5rem;
@@ -34,7 +34,7 @@ const REGISTER_BUTTON = styled.button`
     }
 `;
 
-const KPI_GRID = styled(motion.div)`
+const KpiGrid = styled(motion.div)`
     display: grid;
     gap: 2.5rem;
     grid-template-columns: repeat(1, 1fr);
@@ -49,7 +49,7 @@ const KPI_GRID = styled(motion.div)`
     }
 `;
 
-const CARD_ROW_ITEM = styled(motion.div)``;
+const CardRowItem = styled(motion.div)``;
 
 // SECTION_TITLE styled component is no longer needed here,
 // as it will be replaced by SectionHeader.
@@ -178,24 +178,24 @@ const VendorPortalPage: React.FC = () => {
 
     return (
         <PageContainer>
-            <PAGE_HEADER>
+            <PageHeader>
                 <div>
                     <Title>Vendor Portal</Title>
                     <Subtitle>Manage vendor accounts and verification status</Subtitle>
                 </div>
-                <REGISTER_BUTTON>
+                <RegisterButton>
                     <Users size={20} style={{marginRight: '0.5rem'}}/>
                     Register Vendor
-                </REGISTER_BUTTON>
-            </PAGE_HEADER>
+                </RegisterButton>
+            </PageHeader>
 
-            <KPI_GRID
+            <KpiGrid
                 variants={CONTAINER_VARIANTS}
                 initial="hidden"
                 animate="visible"
             >
                 {VENDOR_KPI_CARDS_DATA.map((card) => (
-                    <CARD_ROW_ITEM key={card.title} variants={ITEM_VARIANTS}>
+                    <CardRowItem key={card.title} variants={ITEM_VARIANTS}>
                         <KPICard
                             title={card.title}
                             value={card.value}
@@ -204,11 +204,11 @@ const VendorPortalPage: React.FC = () => {
                             icon={card.icon}
                             $color={card.$color}
                         />
-                    </CARD_ROW_ITEM>
+                    </CardRowItem>
                 ))}
-            </KPI_GRID>
+            </KpiGrid>
 
-            <SectionHeader size="1rem">Vendor Management ({VENDOR_TABLE_DATA.length})</SectionHeader>
+            <SectionHeader>Vendor Management</SectionHeader>
             <Table<VendorItem>
                 columns={VENDOR_TABLE_COLUMNS}
                 data={VENDOR_TABLE_DATA}

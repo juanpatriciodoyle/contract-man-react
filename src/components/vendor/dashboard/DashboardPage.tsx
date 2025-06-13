@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
-import {Subtitle, Title, SectionHeader} from '../../ui/text';
+import {SectionHeader, Subtitle, Title} from '../../ui/text';
 import KPICard from '../../admin/dashboard/KPICard';
 import {CheckCircle, Clock, CloudUpload, DollarSign, Edit, Eye, FileText, Trash2} from 'lucide-react';
 import Table, {TableColumn} from '../../ui/table/table';
 import {Chip} from '../../ui/chip';
 import {ActionButton, ActionIcons, ContractTitle} from '../../ui/table/tableElements';
 import {formatValue, getStatusChipType} from '../../utils';
-import { CardLayout } from '../../ui/CardLayout';
-import { PageContainer } from '../../layout/PageContainer';
+import {CardLayout} from '../../ui/CardLayout';
+import {PageContainer} from '../../layout/PageContainer';
 
 const KpiGrid = styled(motion.div)`
     width: 100%;
@@ -87,6 +87,11 @@ const ButtonGroup = styled.div`
     gap: 1rem;
     margin-top: 1.5rem;
 `;
+
+const GridWrapper = styled.div`
+    display: grid;
+    gap: 40px;
+`
 
 
 interface RecentContract {
@@ -216,7 +221,7 @@ const VendorDashboardPage: React.FC = () => {
 
     useEffect(() => {
         const today = new Date();
-        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        const options: Intl.DateTimeFormatOptions = {year: 'numeric', month: 'long', day: 'numeric'};
         setCurrentDate(today.toLocaleDateString('en-US', options));
     }, []);
 
@@ -240,29 +245,19 @@ const VendorDashboardPage: React.FC = () => {
                 ))}
             </KpiGrid>
 
+            <SectionHeader>Recent Contract Submissions</SectionHeader>
             <DashboardGrid>
-                <CardLayout>
-                    <SectionHeader>Recent Contract Submissions</SectionHeader>
+                <div>
                     <Table<RecentContract>
                         columns={RECENT_CONTRACTS_COLUMNS}
                         data={RECENT_CONTRACTS_DATA}
                         emptyMessage="No recent contracts found."
                         showToolbar={false}
                     />
-                    <div style={{textAlign: 'right', marginTop: '1rem'}}>
-                        <button style={{
-                            color: '#4f46e5',
-                            fontWeight: 500,
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer'
-                        }}>View All
-                        </button>
-                    </div>
-                </CardLayout>
+                </div>
 
-                <div>
-                    <CardLayout>
+                <GridWrapper>
+                    <CardLayout $padding={"1.5rem 1.5rem 0.5rem 1.5rem"}>
                         <SectionHeader>Verification Status</SectionHeader>
                         <VerificationStatusItem>
                             <span>Account Status</span>
@@ -278,7 +273,7 @@ const VendorDashboardPage: React.FC = () => {
                         </VerificationStatusItem>
                         <p style={{fontSize: '0.875rem', color: '#6b7280', marginTop: '1rem', textAlign: 'center'}}>
                             Fully verified vendor <br/>
-                            <span style={{ fontSize: '0.75rem' }}>last updated: {currentDate}</span>
+                            <span style={{fontSize: '0.75rem'}}>last updated: {currentDate}</span>
                         </p>
                     </CardLayout>
 
@@ -299,7 +294,7 @@ const VendorDashboardPage: React.FC = () => {
                             </QuickActionsButton>
                         </ButtonGroup>
                     </CardLayout>
-                </div>
+                </GridWrapper>
             </DashboardGrid>
         </PageContainer>
     );

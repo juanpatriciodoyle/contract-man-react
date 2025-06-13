@@ -1,21 +1,17 @@
-import React, { useMemo } from 'react';
-import { ResponseItem } from '../../../hooks/useGetContracts';
+import React, {useMemo} from 'react';
+import {ResponseItem} from '../../../hooks/useGetContracts';
 import StatusProgressBarChart from '../../ui/statusProgressBarChart';
-import { CardLayout } from '../../ui/CardLayout';
-import {SectionHeader} from "../../ui/text";
-import {LineChart} from "lucide-react";
 import styled from "styled-components";
-import {motion} from "framer-motion";
 
 interface OverviewProps {
     items: ResponseItem[];
 }
 
 const STATUS_COLORS_DATA = [
-    { name: 'Approved', color: '#10B981' },
-    { name: 'Pending Review', color: '#FBBF24' },
-    { name: 'Need More Information', color: '#F97316' },
-    { name: 'Rejected', color: '#EF4444' },
+    {name: 'Approved', color: '#10B981'},
+    {name: 'Pending Review', color: '#FBBF24'},
+    {name: 'Need More Information', color: '#F97316'},
+    {name: 'Rejected', color: '#EF4444'},
 ];
 
 const ChartWrapper = styled.div`
@@ -26,7 +22,7 @@ const ChartWrapper = styled.div`
     align-items: center;
 `;
 
-const ContractStatusOverview: React.FC<OverviewProps> = ({ items }) => {
+const ContractStatusOverview: React.FC<OverviewProps> = ({items}) => {
     const statusCounts = useMemo(() => {
         const counts = {
             'Approved': 0,

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import {Subtitle, Title} from '../../ui/text';
+import {SectionHeader, Subtitle, Title} from '../../ui/text';
 import {CloudUpload, Scan, ShieldCheck, ClipboardCheck, CheckCircle} from 'lucide-react';
 import ProgressSteps from '../../ui/progressSteps';
 import { CardLayout } from '../../ui/CardLayout';
@@ -14,7 +14,7 @@ const DropArea = styled.div`
     text-align: center;
     background-color: #f9fafb;
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,7 +53,7 @@ const ChooseFileButton = styled.button`
     }
 `;
 
-const SupportedFormats = styled.p`
+const SupportedFormats = styled.div`
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 1.5rem;
@@ -70,6 +70,11 @@ const VERIFICATION_STEPS = [
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const SUPPORTED_FORMATS_TEXT = 'Supported formats: PDF, JPG, JPEG, PNG (Max 10MB)';
 
+const FlexWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
 
 const VerificationStatusPage: React.FC = () => {
     const CURRENT_STEP = 1;
@@ -99,10 +104,9 @@ const VerificationStatusPage: React.FC = () => {
 
             <ProgressSteps steps={VERIFICATION_STEPS} currentStepId={CURRENT_STEP} />
 
-            <CardLayout $marginTop="2.5rem" $padding="2.5rem">
-                <h3 style={{fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '1.5rem'}}>
-                    Upload Contract Document
-                </h3>
+            <SectionHeader>Upload ID Document</SectionHeader>
+            <CardLayout $padding="1.5rem">
+                <FlexWrapper>
                 <DropArea>
                     <UploadIcon size={48}/>
                     {selectedFile ? (
@@ -122,6 +126,7 @@ const VerificationStatusPage: React.FC = () => {
                 <SupportedFormats>
                     {SUPPORTED_FORMATS_TEXT}
                 </SupportedFormats>
+                </FlexWrapper>
             </CardLayout>
         </PageContainer>
     );
